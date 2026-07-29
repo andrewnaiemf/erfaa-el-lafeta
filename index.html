@@ -74,7 +74,7 @@
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      grid-template-rows: auto auto minmax(0, 1fr);
       gap: clamp(10px, 1.8vh, 16px);
       padding: clamp(12px, 2vh, 20px);
       overflow: hidden;
@@ -193,12 +193,16 @@
     .play-row {
       display: grid;
       grid-template-columns: 1.4fr 1fr;
+      grid-template-areas:
+        "info cta"
+        "legend legend";
       gap: clamp(12px, 2vw, 18px);
       align-items: stretch;
       min-height: 0;
     }
 
     .play-info {
+      grid-area: info;
       background: linear-gradient(160deg, #f3fbf7, #eaf6f1);
       border: 2px solid #cfe6db;
       border-radius: 18px;
@@ -208,6 +212,7 @@
       justify-content: center;
       gap: 8px;
       text-align: right;
+      min-height: 0;
     }
 
     .game-name {
@@ -247,6 +252,7 @@
     }
 
     .play-cta {
+      grid-area: cta;
       background: linear-gradient(160deg, #1f4f86, #2b6cb0);
       border-radius: 18px;
       padding: clamp(12px, 2vh, 18px);
@@ -258,6 +264,7 @@
       color: #fff;
       text-align: center;
       box-shadow: 0 10px 24px rgba(43, 108, 176, 0.28);
+      min-height: 0;
     }
 
     .play-cta p {
@@ -281,6 +288,7 @@
     }
 
     #welcome .legend {
+      grid-area: legend;
       width: 100%;
       margin: 0;
       gap: 10px;
@@ -351,25 +359,163 @@
       font-size: clamp(2rem, 6vh, 3.6rem);
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
+      body {
+        padding: 6px;
+      }
+
+      .app {
+        height: calc(100vh - 12px);
+        height: calc(100dvh - 12px);
+        gap: 0;
+      }
+
+      #welcome .welcome-shell {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        overflow: hidden;
+      }
+
       .hero-row {
-        grid-template-columns: 1fr;
-        justify-items: center;
-        text-align: center;
-      }
-      .hero-copy {
+        display: flex;
+        flex-direction: row;
         align-items: center;
-        text-align: center;
+        gap: 8px;
+        flex-shrink: 0;
       }
-      .hero-tags { justify-content: center; }
-      .play-row { grid-template-columns: 1fr; }
-      .play-info,
-      .game-name,
-      #welcome .subtitle { text-align: center; }
-      .rule-chips { justify-content: center; }
+
+      .hero-logo-wrap {
+        padding: 3px;
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+
+      .retreat-logo {
+        width: 58px;
+      }
+
+      .hero-copy {
+        align-items: flex-start;
+        text-align: right;
+        gap: 2px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .hero-copy .title-text {
+        font-size: 1.45rem;
+      }
+
+      .hero-tags {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+      }
+
+      .retreat-meta {
+        font-size: 0.78rem;
+      }
+
+      .retreat-group {
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        white-space: normal;
+      }
+
       .verse {
+        flex-shrink: 0;
         flex-direction: column;
         text-align: center;
+        padding: 6px 8px;
+        font-size: 0.88rem;
+        gap: 4px;
+        border-radius: 12px;
+      }
+
+      .verse small {
+        padding: 2px 8px;
+        font-size: 0.7rem;
+      }
+
+      .play-row {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        gap: 6px;
+        overflow: hidden;
+      }
+
+      .play-info {
+        order: 1;
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        padding: 8px 10px;
+        gap: 2px;
+        border-radius: 12px;
+        text-align: center;
+        align-items: center;
+      }
+
+      .game-name {
+        text-align: center;
+        font-size: 1.1rem;
+      }
+
+      #welcome .subtitle {
+        display: none;
+      }
+
+      .rule-chips {
+        display: none !important;
+      }
+
+      #welcome .legend {
+        order: 2;
+        flex: 0 0 auto;
+        gap: 5px;
+      }
+
+      #welcome .legend-item {
+        padding: 8px 2px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 0 rgba(0,0,0,0.12);
+      }
+
+      .play-cta {
+        order: 3;
+        flex: 0 0 auto;
+        position: relative;
+        z-index: 10;
+        padding: 8px;
+        gap: 0;
+        border-radius: 14px;
+        box-shadow: 0 4px 14px rgba(43, 108, 176, 0.35);
+        background: linear-gradient(160deg, #245a99, #2b6cb0);
+      }
+
+      .play-cta p {
+        display: none;
+      }
+
+      #welcome .actions {
+        width: 100%;
+      }
+
+      #welcome .btn.gold {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        padding: 12px 14px;
+        font-size: 1.2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 0 #9a740c;
       }
     }
 
@@ -672,7 +818,6 @@
         flex-direction: row;
         gap: 12px;
       }
-      #welcome .legend { grid-template-columns: repeat(3, 1fr); }
       .feedback-explain { max-width: 90%; }
     }
   </style>
@@ -744,12 +889,12 @@
               <button class="btn gold" id="startBtn" type="button">ابدأ اللعب 🚀</button>
             </div>
           </div>
-        </div>
 
-        <div class="legend">
-          <div class="legend-item o">🟢 أرثوذكسي</div>
-          <div class="legend-item c">🔵 كاثوليكي</div>
-          <div class="legend-item p">🔴 بروتستانتي</div>
+          <div class="legend">
+            <div class="legend-item o">🟢 أرثوذكسي</div>
+            <div class="legend-item c">🔵 كاثوليكي</div>
+            <div class="legend-item p">🔴 بروتستانتي</div>
+          </div>
         </div>
       </div>
     </section>
