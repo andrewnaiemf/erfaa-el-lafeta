@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>ضد التيار | ارفع اللافتة الصح ✝</title>
+  <style>
+    :root {
+      --bg1: #e8f4f1;
+      --bg2: #f7f0e8;
+      --ink: #1e3a3a;
+      --muted: #4a6868;
+      --card: #ffffff;
+      --orthodox: #1f9d6a;
+      --orthodox-dark: #147a50;
+      --catholic: #2b6cb0;
+      --catholic-dark: #1e4f86;
+      --protestant: #c93a3a;
+      --protestant-dark: #9b2c2c;
+      --gold: #d4a017;
+      --shadow: 0 10px 28px rgba(30, 58, 58, 0.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", "Tahoma", "Arial", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(31, 157, 106, 0.14), transparent 40%),
+        radial-gradient(circle at 88% 12%, rgba(43, 108, 176, 0.12), transparent 38%),
+        radial-gradient(circle at 70% 85%, rgba(201, 58, 58, 0.1), transparent 42%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .app {
+      width: min(1100px, 100%);
+      height: calc(100vh - 20px);
+      height: calc(100dvh - 20px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .screen { display: none; animation: fadeIn 0.35s ease; }
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #welcome.active,
+    #result.active {
+      overflow: hidden;
+      justify-content: center;
+    }
+
+    #welcome .welcome-shell {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: clamp(10px, 1.8vh, 16px);
+      padding: clamp(12px, 2vh, 20px);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(43, 108, 176, 0.08), transparent 42%),
+        radial-gradient(circle at 0% 100%, rgba(31, 157, 106, 0.1), transparent 40%),
+        #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: clamp(14px, 2.5vw, 28px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .hero-logo-wrap {
+      background: #f7fafc;
+      border: 2px solid #e2eaf2;
+      border-radius: 20px;
+      padding: clamp(8px, 1.2vh, 14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .retreat-logo {
+      width: clamp(110px, 18vh, 180px);
+      height: auto;
+      display: block;
+    }
+
+    .hero-copy {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    .hero-copy .title-text {
+      font-size: clamp(2rem, 5.5vh, 3.4rem);
+      font-weight: 900;
+      color: var(--catholic-dark);
+      line-height: 1.1;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .retreat-meta {
+      margin: 0;
+      font-size: clamp(0.95rem, 2.1vh, 1.2rem);
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .retreat-group {
+      display: inline-flex;
+      align-items: center;
+      background: #eef5fb;
+      color: var(--catholic-dark);
+      border: 2px solid #c5d8ef;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-weight: 800;
+      font-size: clamp(0.85rem, 1.8vh, 1.05rem);
+      white-space: nowrap;
+    }
+
+    .verse {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0;
+      width: 100%;
+      max-width: none;
+      background: linear-gradient(105deg, #fff8e8, #fff3d6 60%, #f7e8b8);
+      border: 2px solid #e6d19a;
+      border-radius: 16px;
+      padding: clamp(10px, 1.6vh, 14px) clamp(14px, 2vw, 20px);
+      font-size: clamp(1rem, 2.4vh, 1.35rem);
+      font-weight: 800;
+      line-height: 1.4;
+      color: #6b5210;
+      text-align: right;
+    }
+
+    .verse .verse-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .verse small {
+      display: inline-block;
+      margin: 0;
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(107, 82, 16, 0.1);
+      font-size: 0.85em;
+      opacity: 1;
+      white-space: nowrap;
+    }
+
+    .play-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: clamp(12px, 2vw, 18px);
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .play-info {
+      background: linear-gradient(160deg, #f3fbf7, #eaf6f1);
+      border: 2px solid #cfe6db;
+      border-radius: 18px;
+      padding: clamp(12px, 2vh, 18px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .game-name {
+      text-align: right;
+      margin: 0;
+      font-size: clamp(1.25rem, 3.2vh, 1.85rem);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .game-name span { color: var(--orthodox); }
+
+    #welcome .subtitle {
+      margin: 0;
+      text-align: right;
+      font-size: clamp(0.9rem, 2vh, 1.1rem);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .rule-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .rule-chips span {
+      background: #fff;
+      border: 1px solid #d5ebe3;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: clamp(0.78rem, 1.6vh, 0.95rem);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .play-cta {
+      background: linear-gradient(160deg, #1f4f86, #2b6cb0);
+      border-radius: 18px;
+      padding: clamp(12px, 2vh, 18px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(43, 108, 176, 0.28);
+    }
+
+    .play-cta p {
+      margin: 0;
+      font-weight: 800;
+      font-size: clamp(0.95rem, 2vh, 1.15rem);
+      line-height: 1.4;
+      opacity: 0.95;
+    }
+
+    #welcome .actions {
+      margin: 0 !important;
+    }
+
+    #welcome .btn.gold {
+      min-width: min(240px, 100%);
+      padding: clamp(12px, 2vh, 16px) 28px;
+      font-size: clamp(1.1rem, 2.4vh, 1.4rem);
+      background: linear-gradient(180deg, #f0c84a, #d4a017);
+      box-shadow: 0 6px 0 #9a740c;
+    }
+
+    #welcome .legend {
+      width: 100%;
+      margin: 0;
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    #welcome .legend-item {
+      padding: clamp(12px, 2vh, 16px) 8px;
+      font-size: clamp(1rem, 2.2vh, 1.25rem);
+      border-radius: 14px;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    }
+
+    /* used on result screen */
+    .retreat-title {
+      font-size: clamp(1.55rem, 4.2vh, 2.6rem);
+      font-weight: 900;
+      color: var(--catholic-dark);
+      line-height: 1.15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-align: center;
+    }
+
+    .retreat-title.compact .retreat-logo {
+      width: clamp(70px, 10vh, 110px);
+      margin-bottom: 2px;
+    }
+
+    .retreat-title .title-text {
+      display: block;
+    }
+
+    #result .card {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      overflow: hidden;
+      text-align: center;
+      padding: clamp(12px, 2vh, 22px);
+    }
+
+    #result .verse {
+      margin: 4px 0;
+      display: block;
+      text-align: center;
+      max-width: 36ch;
+    }
+
+    #result .verse small {
+      display: block;
+      margin-top: 6px;
+    }
+
+    #result .stars {
+      margin: 4px 0;
+    }
+
+    #result .result-score {
+      margin: 4px 0;
+      font-size: clamp(2rem, 6vh, 3.6rem);
+    }
+
+    @media (max-width: 760px) {
+      .hero-row {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+      .hero-copy {
+        align-items: center;
+        text-align: center;
+      }
+      .hero-tags { justify-content: center; }
+      .play-row { grid-template-columns: 1fr; }
+      .play-info,
+      .game-name,
+      #welcome .subtitle { text-align: center; }
+      .rule-chips { justify-content: center; }
+      .verse {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.6); opacity: 0; }
+      70% { transform: scale(1.08); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(12px, 2vw, 22px);
+    }
+
+    .brand {
+      text-align: center;
+      font-size: clamp(1.8rem, 4.5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--ink);
+    }
+
+    .brand span { color: var(--orthodox); }
+
+    .subtitle {
+      text-align: center;
+      font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #d9ebe6;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--orthodox), var(--catholic));
+      border-radius: inherit;
+      transition: width 0.35s ease;
+    }
+
+    .axis {
+      display: inline-block;
+      align-self: center;
+      background: #eaf6f1;
+      color: var(--orthodox-dark);
+      border: 2px solid #b7e0cf;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+      flex-shrink: 0;
+    }
+
+    .play-area {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+    }
+
+    .question-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 0;
+      width: 100%;
+    }
+
+    .question-text {
+      font-size: clamp(1.25rem, 3.2vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.45;
+      max-width: 28ch;
+    }
+
+    .banners {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .banner {
+      appearance: none;
+      border: none;
+      border-radius: 16px;
+      min-height: 72px;
+      height: clamp(72px, 12vh, 110px);
+      padding: 10px 8px;
+      color: #fff;
+      font-size: clamp(1.05rem, 2.4vw, 1.55rem);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      user-select: none;
+    }
+
+    .banner:active { transform: translateY(5px); box-shadow: 0 2px 0 rgba(0,0,0,0.18); }
+    .banner:disabled { cursor: default; }
+
+    .banner.orthodox { background: linear-gradient(180deg, #2cb877, var(--orthodox)); }
+    .banner.catholic { background: linear-gradient(180deg, #4190d8, var(--catholic)); }
+    .banner.protestant { background: linear-gradient(180deg, #e05555, var(--protestant)); }
+
+    .banner.correct-pick {
+      outline: 4px solid #fff59d;
+      filter: brightness(1.08);
+      animation: pop 0.35s ease;
+    }
+
+    .banner.wrong-pick {
+      filter: grayscale(0.55) brightness(0.85);
+      animation: shake 0.35s ease;
+    }
+
+    .banner.dim {
+      opacity: 0.45;
+      filter: grayscale(0.35);
+    }
+
+    .banner .emoji { font-size: 1.35em; line-height: 1; }
+
+    .feedback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      text-align: center;
+      gap: 8px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(12px, 2vw, 22px);
+      z-index: 5;
+    }
+
+    .feedback.show { display: flex; animation: pop 0.4s ease; }
+
+    .feedback-icon {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1;
+    }
+
+    .feedback-title {
+      font-size: clamp(1.25rem, 2.8vw, 1.85rem);
+      font-weight: 900;
+    }
+
+    .feedback-title.ok { color: var(--orthodox-dark); }
+    .feedback-title.bad { color: var(--protestant-dark); }
+
+    .feedback-explain {
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 40ch;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 24px;
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      font-weight: 800;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(180deg, #3aa88a, #217a63);
+      box-shadow: 0 5px 0 #155445;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      min-width: 160px;
+    }
+
+    .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #155445; }
+    .btn.hidden { display: none; }
+
+    .btn.gold {
+      background: linear-gradient(180deg, #e3b63a, var(--gold));
+      box-shadow: 0 6px 0 #9a740c;
+    }
+    .btn.gold:active { box-shadow: 0 2px 0 #9a740c; }
+
+    .welcome-list {
+      list-style: none;
+      display: grid;
+      gap: 14px;
+      margin: 18px 0 8px;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .welcome-list li {
+      background: #f4faf8;
+      border: 2px solid #d5ebe3;
+      border-radius: 16px;
+      padding: 14px 16px;
+      line-height: 1.5;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .legend-item {
+      text-align: center;
+      color: #fff;
+      border-radius: 14px;
+      padding: 14px 8px;
+      font-weight: 900;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+    }
+
+    .legend-item.o { background: var(--orthodox); }
+    .legend-item.c { background: var(--catholic); }
+    .legend-item.p { background: var(--protestant); }
+
+    .result-score {
+      text-align: center;
+      font-size: clamp(2.4rem, 7vw, 4.2rem);
+      font-weight: 900;
+      color: var(--orthodox-dark);
+      margin: 10px 0;
+    }
+
+    .result-msg {
+      text-align: center;
+      font-size: clamp(1.25rem, 3vw, 1.8rem);
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .stars {
+      text-align: center;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 6px;
+      margin: 8px 0 16px;
+    }
+
+    @media (max-width: 760px) {
+      .banners { grid-template-columns: 1fr; }
+      .banner {
+        min-height: 56px;
+        height: clamp(56px, 9vh, 72px);
+        flex-direction: row;
+        gap: 12px;
+      }
+      #welcome .legend { grid-template-columns: repeat(3, 1fr); }
+      .feedback-explain { max-width: 90%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- شاشة الترحيب -->
+    <section id="welcome" class="screen active">
+      <div class="welcome-shell">
+        <div class="hero-row">
+          <div class="hero-logo-wrap">
+            <svg class="retreat-logo" viewBox="0 0 520 280" xmlns="http://www.w3.org/2000/svg" aria-label="ضد التيار" role="img">
+              <path d="M155 48 A95 95 0 1 1 70 175" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+              <path d="M78 195 A95 95 0 0 1 145 232" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="28" cy="118" r="7" fill="#111"/>
+              <circle cx="48" cy="98" r="4.5" fill="#111"/>
+              <circle cx="22" cy="88" r="3" fill="#111"/>
+              <circle cx="55" cy="130" r="3.5" fill="#111"/>
+              <g transform="translate(70,105)">
+                <path d="M20 35 C55 0, 125 0, 155 35 C125 70, 55 70, 20 35 Z" fill="none" stroke="#111" stroke-width="7" stroke-linejoin="round"/>
+                <path d="M20 35 L0 18 L8 35 L0 52 Z" fill="none" stroke="#111" stroke-width="7" stroke-linejoin="round"/>
+                <circle cx="120" cy="35" r="5" fill="#111"/>
+              </g>
+              <g fill="#111">
+                <path d="M300 55 C330 35, 375 35, 400 55 C375 75, 330 75, 300 55 Z"/>
+                <path d="M400 55 L420 42 L412 55 L420 68 Z"/>
+                <circle cx="325" cy="55" r="4.5" fill="#fff"/>
+                <path d="M335 115 C370 90, 425 90, 455 115 C425 140, 370 140, 335 115 Z"/>
+                <path d="M455 115 L480 98 L470 115 L480 132 Z"/>
+                <circle cx="365" cy="115" r="5" fill="#fff"/>
+                <path d="M290 175 C325 155, 375 155, 405 175 C375 195, 325 195, 290 175 Z"/>
+                <path d="M405 175 L428 160 L418 175 L428 190 Z"/>
+                <circle cx="318" cy="175" r="4.5" fill="#fff"/>
+                <path d="M340 230 C368 214, 408 214, 432 230 C408 246, 368 246, 340 230 Z"/>
+                <path d="M432 230 L450 218 L444 230 L450 242 Z"/>
+                <circle cx="362" cy="230" r="4" fill="#fff"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="hero-copy">
+            <div class="title-text">ضد التيار</div>
+            <div class="hero-tags">
+              <div class="retreat-meta">خدمة ابتدائي بنين — سنة 2026</div>
+              <div class="retreat-group">مجموعة عمل: اختلاف الطوائف</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="verse">
+          <span class="verse-text">«تمسّك بما عندك لئلا يأخذ أحد إكليلك»</span>
+          <small>رؤيا 3: 11</small>
+        </div>
+
+        <div class="play-row">
+          <div class="play-info">
+            <h1 class="game-name">✝️ ارفع <span>اللافتة</span> الصح</h1>
+            <p class="subtitle">شوف الموقف العقائدي… وارفَع اللافتة الصح!</p>
+            <div class="rule-chips">
+              <span>📖 موقف على الشاشة</span>
+              <span>🙋‍♂️ اختار اللافتة</span>
+              <span>✨ فيه إجابتين صح أحيانًا</span>
+            </div>
+          </div>
+
+          <div class="play-cta">
+            <p>جاهزين نتميّز الفكر الأرثوذكسي؟</p>
+            <div class="actions">
+              <button class="btn gold" id="startBtn" type="button">ابدأ اللعب 🚀</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item o">🟢 أرثوذكسي</div>
+          <div class="legend-item c">🔵 كاثوليكي</div>
+          <div class="legend-item p">🔴 بروتستانتي</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- شاشة الأسئلة -->
+    <section id="quiz" class="screen">
+      <div class="progress-wrap card" style="padding: 14px 18px;">
+        <div class="progress-label">
+          <span id="qCounter">سؤال 1 من 37</span>
+          <span id="scoreLive">صح: 0</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <div class="axis" id="axisLabel">الكهنوت</div>
+
+      <div class="play-area">
+        <div class="card question-box">
+          <p class="question-text" id="questionText"></p>
+        </div>
+
+        <div class="feedback" id="feedback">
+          <div class="feedback-icon" id="feedbackIcon"></div>
+          <div class="feedback-title" id="feedbackTitle"></div>
+          <p class="feedback-explain" id="feedbackExplain"></p>
+          <div class="actions">
+            <button class="btn hidden" id="nextBtn" type="button">التالي ➡️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="banners" id="banners">
+        <button class="banner orthodox" data-answer="orthodox" type="button">
+          <span class="emoji">🟢</span>
+          <span>أرثوذكسي</span>
+        </button>
+        <button class="banner catholic" data-answer="catholic" type="button">
+          <span class="emoji">🔵</span>
+          <span>كاثوليكي</span>
+        </button>
+        <button class="banner protestant" data-answer="protestant" type="button">
+          <span class="emoji">🔴</span>
+          <span>بروتستانتي</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- شاشة النتيجة -->
+    <section id="result" class="screen">
+      <div class="card">
+        <div class="retreat-title compact">
+          <svg class="retreat-logo" viewBox="0 0 520 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M155 48 A95 95 0 1 1 70 175" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+            <path d="M78 195 A95 95 0 0 1 145 232" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="28" cy="118" r="7" fill="#111"/>
+            <circle cx="48" cy="98" r="4.5" fill="#111"/>
+            <circle cx="22" cy="88" r="3" fill="#111"/>
+            <g transform="translate(70,105)">
+              <path d="M20 35 C55 0, 125 0, 155 35 C125 70, 55 70, 20 35 Z" fill="none" stroke="#111" stroke-width="7" stroke-linejoin="round"/>
+              <path d="M20 35 L0 18 L8 35 L0 52 Z" fill="none" stroke="#111" stroke-width="7" stroke-linejoin="round"/>
+              <circle cx="120" cy="35" r="5" fill="#111"/>
+            </g>
+            <g fill="#111">
+              <path d="M300 55 C330 35, 375 35, 400 55 C375 75, 330 75, 300 55 Z"/>
+              <path d="M400 55 L420 42 L412 55 L420 68 Z"/>
+              <circle cx="325" cy="55" r="4.5" fill="#fff"/>
+              <path d="M335 115 C370 90, 425 90, 455 115 C425 140, 370 140, 335 115 Z"/>
+              <path d="M455 115 L480 98 L470 115 L480 132 Z"/>
+              <circle cx="365" cy="115" r="5" fill="#fff"/>
+              <path d="M290 175 C325 155, 375 155, 405 175 C375 195, 325 195, 290 175 Z"/>
+              <path d="M405 175 L428 160 L418 175 L428 190 Z"/>
+              <circle cx="318" cy="175" r="4.5" fill="#fff"/>
+              <path d="M340 230 C368 214, 408 214, 432 230 C408 246, 368 246, 340 230 Z"/>
+              <path d="M432 230 L450 218 L444 230 L450 242 Z"/>
+              <circle cx="362" cy="230" r="4" fill="#fff"/>
+            </g>
+          </svg>
+          <span class="title-text">ضد التيار</span>
+        </div>
+        <h1 class="brand">🎉 أحسنت!</h1>
+        <p class="subtitle">خلّصت اللعبة ✝️</p>
+        <div class="verse">
+          «تمسّك بما عندك لئلا يأخذ أحد إكليلك»
+          <small>رؤيا 3: 11</small>
+        </div>
+        <div class="stars" id="stars">⭐⭐⭐</div>
+        <div class="result-score" id="finalScore">0 / 37</div>
+        <p class="result-msg" id="finalMsg"></p>
+        <div class="actions">
+          <button class="btn gold" id="replayBtn" type="button">العب تاني 🔁</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const questions = [
+      // الكهنوت
+      {
+        axis: "الكهنوت",
+        text: "عندنا رتب كهنوتية، لكن البابا بتاعنا بشر عادي ممكن يخطي",
+        correct: ["orthodox"],
+        explain: "ده الفكر الأرثوذكسي: فيه كهنوت، والبابا مش معصوم من الخطأ."
+      },
+      {
+        axis: "الكهنوت",
+        text: "البطرك بتاعنا معصوم من الخطأ، وكل كلمة يقولها كأنها وحي من ربنا",
+        correct: ["catholic"],
+        explain: "ده الفكر الكاثوليكي: بيؤمنوا بعصمة البابا في التعليم."
+      },
+      {
+        axis: "الكهنوت",
+        text: "معندناش كهنوت خالص، وأعلى راعي عندنا بيتنادى عليه إنه قس زي أي حد",
+        correct: ["protestant"],
+        explain: "ده الفكر البروتستانتي: مفيش سر الكهنوت زي عندنا."
+      },
+      // المعمودية
+      {
+        axis: "المعمودية",
+        text: "بنعمّد الأطفال والكبار بالتغطيس الكامل في الماء",
+        correct: ["orthodox"],
+        explain: "في الأرثوذكسية: المعمودية بالتغطيس الكامل للأطفال والكبار."
+      },
+      {
+        axis: "المعمودية",
+        text: "بنكتفي إننا نسكب شوية ميه على راس الطفل بدل ما نغطسه",
+        correct: ["catholic"],
+        explain: "الكاثوليك غالبًا بيعمدوا بالسكب مش بالتغطيس الكامل."
+      },
+      {
+        axis: "المعمودية",
+        text: "معندناش معمودية أطفال، لازم اللي هيتعمد يكون فاهم ومؤمن بنفسه",
+        correct: ["protestant"],
+        explain: "كتير من البروتستانت بيرفضوا معمودية الأطفال."
+      },
+      // الميرون
+      {
+        axis: "الميرون",
+        text: "بندهن المعمّد ٣٦ مسحة بالزيت المقدس في كل أجزاء جسمه فورًا بعد المعمودية",
+        correct: ["orthodox"],
+        explain: "سر الميرون الأرثوذكسي: ٣٦ مسحة مباشرة بعد المعمودية."
+      },
+      {
+        axis: "الميرون",
+        text: "بنأجّل مسح الطفل بالميرون لحد ما يكبر لسن ٨ سنين، وقبلها معندوش يتناول",
+        correct: ["catholic"],
+        explain: "عند الكاثوليك: التثبيت (الميرون) بيتأجّل لسن أكبر."
+      },
+      {
+        axis: "الميرون",
+        text: "معندناش سر اسمه الميرون خالص، إحنا بنحط إيدنا على الشخص عشان يقبل مواهب الروح القدس",
+        correct: ["protestant"],
+        explain: "البروتستانت مش بيؤمنوا بسر الميرون بنفس المعنى الأرثوذكسي."
+      },
+      // الاعتراف
+      {
+        axis: "الاعتراف",
+        text: "زمان كان عندنا حاجة اسمها صكوك الغفران، تدفع فلوس وتتغفرلك خطاياك، بس دلوقتي بقينا نتجاهل الكلام ده",
+        correct: ["catholic"],
+        explain: "صكوك الغفران كانت ممارسة كاثوليكية تاريخية."
+      },
+      {
+        axis: "الاعتراف",
+        text: "إحنا بنعترف لربنا على طول من غير ما نمر على كاهن",
+        correct: ["protestant"],
+        explain: "الفكر البروتستانتي: الاعتراف لله مباشرة بدون كاهن."
+      },
+      {
+        axis: "الاعتراف",
+        text: "بنعترف بخطايانا للأب الكاهن، وهو بيدينا الحل",
+        correct: ["orthodox"],
+        explain: "ده سر الاعتراف الأرثوذكسي: الاعتراف للكاهن ونيل الحل."
+      },
+      // التناول
+      {
+        axis: "التناول",
+        text: "لازم نصوم انقطاعي ٩ ساعات كاملة قبل التناول",
+        correct: ["orthodox"],
+        explain: "في الكنيسة الأرثوذكسية: صوم انقطاعي ٩ ساعات قبل التناول."
+      },
+      {
+        axis: "التناول",
+        text: "بنؤمن إن الخبز والخمر بيتحولوا لجسد ودم المسيح فعلاً، بس الصوم عندنا ساعتين بس عن الأكل",
+        correct: ["catholic"],
+        explain: "الكاثوليك بيؤمنوا بالتحوّل، والصوم عندهم أقصر (حوالي ساعتين)."
+      },
+      {
+        axis: "التناول",
+        text: "معندناش مذبح في كنايسنا أصلاً، لأنه مفيش ذبيحة",
+        correct: ["protestant"],
+        explain: "كثير من الكنائس البروتستانتية مش بتؤمن بالمذبح كذبيحة."
+      },
+      // الشفاعة والقديسين
+      {
+        axis: "الشفاعة والقديسين",
+        text: "بنؤمن بشفاعة القديسين والملائكة، وبنكرمهم بالأيقونات، لكن مش بنستخدم تماثيل",
+        correct: ["orthodox"],
+        explain: "الأرثوذكس: شفاعة + أيقونات، من غير تماثيل منحوتة."
+      },
+      {
+        axis: "الشفاعة والقديسين",
+        text: "زي الأرثوذكس بنؤمن بشفاعة القديسين، بس إحنا بنستخدم التماثيل كمان",
+        correct: ["catholic"],
+        explain: "الكاثوليك بيؤمنوا بالشفاعة وبيستخدموا التماثيل."
+      },
+      {
+        axis: "الشفاعة والقديسين",
+        text: "معندناش شفاعة قديسين ولا ملائكة ولا حتى العدرا",
+        correct: ["protestant"],
+        explain: "الفكر البروتستانتي غالبًا بيرفض شفاعة القديسين."
+      },
+      // الروح القدس
+      {
+        axis: "الروح القدس",
+        text: "بنؤمن إن الروح القدس منبثق من الآب بس",
+        correct: ["orthodox"],
+        explain: "الإيمان الأرثوذكسي: الانبثاق من الآب وحده."
+      },
+      {
+        axis: "الروح القدس",
+        text: "بنؤمن إن الروح القدس منبثق من الآب والابن مع بعض",
+        correct: ["catholic", "protestant"],
+        explain: "الكاثوليك والبروتستانت متفقين هنا: من الآب والابن معًا."
+      },
+      // المطهر
+      {
+        axis: "المطهر",
+        text: "بنؤمن إن فيه مكان اسمه المطهر، الإنسان بيتعذب فيه فترة بعد موته",
+        correct: ["catholic"],
+        explain: "عقيدة المطهر خاصة بالفكر الكاثوليكي."
+      },
+      {
+        axis: "المطهر",
+        text: "مش بنؤمن بالمطهر خالص، الدينونة أبدية للأشرار وأبدية للأبرار من غير مرحلة وسطى",
+        correct: ["orthodox", "protestant"],
+        explain: "الأرثوذكس والبروتستانت مش بيؤمنوا بالمطهر."
+      },
+      // العذراء مريم
+      {
+        axis: "العذراء مريم",
+        text: "بنقول إن العدرا ورثت الخطية الأصلية زي باقي البشر، لكنها والدة الإله وليها كرامة خاصة",
+        correct: ["orthodox"],
+        explain: "الأرثوذكس: العدرا والدة الإله، ومن غير عقيدة الحبل بلا دنس."
+      },
+      {
+        axis: "العذراء مريم",
+        text: "بنقول إن العدرا اتولدت من غير خطية أصلية خالص",
+        correct: ["catholic"],
+        explain: "ده عقيدة «الحبل بلا دنس» عند الكاثوليك."
+      },
+      {
+        axis: "العذراء مريم",
+        text: "بنقول إنها اتجوزت يوسف النجار وخلفت منه ولاد، وبنسميها أم يسوع أو أختنا",
+        correct: ["protestant"],
+        explain: "كثير من البروتستانت بيرفضوا لقب والدة الإله والكرامة الأرثوذكسية."
+      },
+      // الصلاة على الموتى
+      {
+        axis: "الصلاة على الموتى",
+        text: "بنصلي على روح الميت ونطلب من ربنا يفتحله باب الفردوس",
+        correct: ["orthodox"],
+        explain: "الأرثوذكس بيصلّوا على أرواح الراقدين ويسألوا الرحمة."
+      },
+      {
+        axis: "الصلاة على الموتى",
+        text: "بنصلي على الميت إن ربنا يريحه من العذاب اللي هو فيه في المطهر",
+        correct: ["catholic"],
+        explain: "الصلاة الكاثوليكية مرتبطة بفكرة المطهر."
+      },
+      {
+        axis: "الصلاة على الموتى",
+        text: "معندناش صلاة على الموتى خالص، مش بنطلب مغفرة للميت",
+        correct: ["protestant"],
+        explain: "الفكر البروتستانتي غالبًا بيرفض الصلاة لأجل الموتى."
+      },
+      // الرهبنة
+      {
+        axis: "الرهبنة",
+        text: "عندنا رهبان وراهبات وأديرة",
+        correct: ["orthodox", "catholic"],
+        explain: "الأرثوذكس والكاثوليك عندهم رهبنة وأديرة. الاتنين إجابة صح!"
+      },
+      {
+        axis: "الرهبنة",
+        text: "معندناش رهبنة خالص في كنايسنا",
+        correct: ["protestant"],
+        explain: "الغالبية البروتستانتية مش عندها نظام رهبنة."
+      },
+      // سر مسحة المرضى
+      {
+        axis: "سر مسحة المرضى",
+        text: "بندهن المريض بالزيت المقدس عشان يتشفى في روحه وجسمه ونفسه، مش بس وهو بيموت",
+        correct: ["orthodox"],
+        explain: "مسحة المرضى الأرثوذكسية للشفاء، مش بس للموت."
+      },
+      {
+        axis: "سر مسحة المرضى",
+        text: "عندنا اسمها «مسحة أخيرة» وبنعملها للشخص وهو مُشرِف على الموت",
+        correct: ["catholic"],
+        explain: "في الفكر الكاثوليكي التقليدي: مسحة أخيرة قرب الموت."
+      },
+      // الكتاب المقدس
+      {
+        axis: "الكتاب المقدس",
+        text: "الشعب معاه الكتاب المقدس، لكن مش بيقراه لوحده — بيسمعه في الكنيسة والكاهن هو اللي بيفسره",
+        correct: ["catholic"],
+        explain: "تاريخيًا عند الكاثوليك: التفسير عبر الكنيسة/الكاهن، ومش كل فرد لوحده."
+      },
+      {
+        axis: "الكتاب المقدس",
+        text: "الكتاب المقدس متوزّع مجانًا على كل الشعب، وكل واحد بيفسّره بنفسه",
+        correct: ["protestant"],
+        explain: "الفكر البروتستانتي: الكتاب لكل فرد، والتفسير الشخصي شائع."
+      },
+      {
+        axis: "الكتاب المقدس",
+        text: "الكتاب المقدس متاح للشعب، لكن بيتفسّر جوه الكنيسة عن طريق الكاهن",
+        correct: ["orthodox"],
+        explain: "الأرثوذكس: الكتاب متاح، والتفسير داخل تقليد الكنيسة."
+      },
+      // المجيء الثاني
+      {
+        axis: "المجيء الثاني",
+        text: "بنؤمن إن السيد المسيح هيرجع وهيملك ألف سنة على الأرض قبل الدينونة النهائية",
+        correct: ["protestant"],
+        explain: "فكرة الملك الألفي منتشرة في أوساط بروتستانتية."
+      },
+      {
+        axis: "المجيء الثاني",
+        text: "بنؤمن إن الرب يسوع هييجي مرة واحدة قدام الكل ويدين العالم على طول",
+        correct: ["orthodox", "catholic"],
+        explain: "الأرثوذكس والكاثوليك متفقين: مجيء واحد للدينونة، من غير ملك ألف سنة."
+      }
+    ];
+
+    const names = {
+      orthodox: "أرثوذكسي 🟢",
+      catholic: "كاثوليكي 🔵",
+      protestant: "بروتستانتي 🔴"
+    };
+
+    let index = 0;
+    let score = 0;
+    let answered = false;
+    let deck = [];
+
+    const welcome = document.getElementById("welcome");
+    const quiz = document.getElementById("quiz");
+    const result = document.getElementById("result");
+    const startBtn = document.getElementById("startBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const replayBtn = document.getElementById("replayBtn");
+    const questionText = document.getElementById("questionText");
+    const axisLabel = document.getElementById("axisLabel");
+    const qCounter = document.getElementById("qCounter");
+    const scoreLive = document.getElementById("scoreLive");
+    const progressFill = document.getElementById("progressFill");
+    const feedback = document.getElementById("feedback");
+    const feedbackIcon = document.getElementById("feedbackIcon");
+    const feedbackTitle = document.getElementById("feedbackTitle");
+    const feedbackExplain = document.getElementById("feedbackExplain");
+    const bannersEl = document.getElementById("banners");
+
+    function getBanners() {
+      return [...bannersEl.querySelectorAll(".banner")];
+    }
+
+    function shuffleInPlace(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr;
+    }
+
+    function answerKey(q) {
+      return q.correct.slice().sort().join("+");
+    }
+
+    // ترتيب متنوّع: يغيّر الطائفة والمحور قدر الإمكان بين كل سؤال والتاني
+    function buildVariedDeck(source) {
+      const remaining = source.slice();
+      const out = [];
+      const start = Math.floor(Math.random() * remaining.length);
+      out.push(remaining.splice(start, 1)[0]);
+
+      while (remaining.length) {
+        const prev = out[out.length - 1];
+        let bestScore = -Infinity;
+        let bestIndexes = [];
+
+        for (let i = 0; i < remaining.length; i++) {
+          const q = remaining[i];
+          let s = Math.random();
+          const overlap = q.correct.filter(c => prev.correct.includes(c)).length;
+
+          if (overlap === 0) s += 30;
+          else if (answerKey(q) !== answerKey(prev)) s += 10;
+          else s -= 20;
+
+          if (q.axis !== prev.axis) s += 18;
+          else s -= 12;
+
+          if (
+            q.correct.length === 1 &&
+            prev.correct.length === 1 &&
+            q.correct[0] === prev.correct[0]
+          ) {
+            s -= 40;
+          }
+
+          if (s > bestScore) {
+            bestScore = s;
+            bestIndexes = [i];
+          } else if (Math.abs(s - bestScore) < 0.0001) {
+            bestIndexes.push(i);
+          }
+        }
+
+        const pick = bestIndexes[Math.floor(Math.random() * bestIndexes.length)];
+        out.push(remaining.splice(pick, 1)[0]);
+      }
+
+      return out;
+    }
+
+    function shuffleBanners() {
+      const order = shuffleInPlace(getBanners());
+      order.forEach(btn => bannersEl.appendChild(btn));
+    }
+
+    function showScreen(el) {
+      [welcome, quiz, result].forEach(s => s.classList.remove("active"));
+      el.classList.add("active");
+    }
+
+    function startGame() {
+      index = 0;
+      score = 0;
+      answered = false;
+      deck = buildVariedDeck(questions);
+      showScreen(quiz);
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = deck[index];
+      answered = false;
+      questionText.textContent = "«" + q.text + "»";
+      axisLabel.textContent = "📚 " + q.axis;
+      qCounter.textContent = "سؤال " + (index + 1) + " من " + deck.length;
+      scoreLive.textContent = "صح: " + score;
+      progressFill.style.width = ((index / deck.length) * 100) + "%";
+
+      feedback.classList.remove("show");
+      nextBtn.classList.add("hidden");
+
+      shuffleBanners();
+
+      getBanners().forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove("correct-pick", "wrong-pick", "dim");
+      });
+    }
+
+    function formatCorrect(list) {
+      return list.map(k => names[k]).join(" و ");
+    }
+
+    function onAnswer(choice) {
+      if (answered) return;
+      answered = true;
+
+      const q = deck[index];
+      const isCorrect = q.correct.includes(choice);
+
+      getBanners().forEach(btn => {
+        btn.disabled = true;
+        const val = btn.dataset.answer;
+        if (isCorrect) {
+          if (val === choice) btn.classList.add("correct-pick");
+          else btn.classList.add("dim");
+        } else {
+          if (val === choice) btn.classList.add("wrong-pick");
+          else if (q.correct.includes(val)) btn.classList.add("correct-pick");
+          else btn.classList.add("dim");
+        }
+      });
+
+      feedback.classList.add("show");
+      if (isCorrect) {
+        score += 1;
+        feedbackIcon.textContent = "✅";
+        feedbackTitle.textContent = "صح يا بطل!";
+        feedbackTitle.className = "feedback-title ok";
+      } else {
+        feedbackIcon.textContent = "❌";
+        feedbackTitle.textContent = "غلط… الإجابة: " + formatCorrect(q.correct);
+        feedbackTitle.className = "feedback-title bad";
+      }
+
+      let extra = "";
+      if (q.correct.length > 1) {
+        extra = " (فيه طائفتين متفقين في النقطة دي)";
+      }
+      feedbackExplain.textContent = q.explain + extra;
+      scoreLive.textContent = "صح: " + score;
+      nextBtn.classList.remove("hidden");
+      nextBtn.textContent = index === deck.length - 1 ? "شوف النتيجة 🏆" : "التالي ➡️";
+    }
+
+    function nextQuestion() {
+      if (index >= deck.length - 1) {
+        showResult();
+        return;
+      }
+      index += 1;
+      renderQuestion();
+    }
+
+    function showResult() {
+      progressFill.style.width = "100%";
+      showScreen(result);
+      document.getElementById("finalScore").textContent = score + " / " + deck.length;
+
+      const ratio = score / deck.length;
+      let msg, stars;
+      if (ratio >= 0.85) {
+        msg = "ممتاز! فهمك للعقيدة الأرثوذكسية رائع 🕊️";
+        stars = "⭐⭐⭐";
+      } else if (ratio >= 0.6) {
+        msg = "شاطر جدًا! كمّل مراجعة المحاور هتبقى أقوى ✝";
+        stars = "⭐⭐";
+      } else {
+        msg = "بداية كويسة! العب تاني عشان تثبّت الإجابات 📖";
+        stars = "⭐";
+      }
+      document.getElementById("finalMsg").textContent = msg;
+      document.getElementById("stars").textContent = stars;
+    }
+
+    startBtn.addEventListener("click", startGame);
+    nextBtn.addEventListener("click", nextQuestion);
+    replayBtn.addEventListener("click", startGame);
+    bannersEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".banner");
+      if (!btn || btn.disabled) return;
+      onAnswer(btn.dataset.answer);
+    });
+  </script>
+</body>
+</html>
