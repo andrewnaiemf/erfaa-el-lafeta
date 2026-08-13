@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة التركيب — صفحتي</title>
+  <link rel="stylesheet" href="safhati-theme.css" />
+  <style>
+    @page { size: A4; margin: 7mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background: #e8eef6;
+    }
+    .no-print {
+      text-align: center; padding: 12px; background: var(--sky-deep); color: #fff;
+    }
+    .no-print button {
+      font: inherit; font-weight: 900; padding: 10px 20px; border: none;
+      border-radius: 10px; background: var(--sun); color: var(--sky-deep); cursor: pointer;
+    }
+    .no-print p { margin: 8px 0 0; font-weight: 700; font-size: 0.88rem; }
+
+    .sheet {
+      width: 196mm; margin: 8px auto; background: #fff; padding: 5mm 6mm;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .sheet + .sheet { page-break-before: always; }
+
+    .head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 3mm; border-bottom: 2px solid var(--sky); padding-bottom: 2mm;
+    }
+    .head h1 { margin: 0; font-size: 11pt; color: var(--sky); }
+    .head span { font-size: 7.5pt; font-weight: 800; color: #64748b; }
+
+    .page {
+      width: var(--page-w);
+      margin: 0 auto;
+      padding: 3mm;
+      border-radius: 12px;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, #b8e0ff 0%, transparent 55%),
+        linear-gradient(160deg, #e8f4ff 0%, #fff8e8 70%);
+    }
+
+    .ghost {
+      border: 2px dashed rgba(30,107,184,0.45);
+      background: rgba(255,255,255,0.45);
+      color: rgba(30,107,184,0.55);
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+    .mm {
+      position: absolute; bottom: -3.2mm; left: 0; right: 0;
+      font-size: 5pt; font-weight: 900; color: #94a3b8; text-align: center;
+    }
+
+    /* —— نفس مقاسات القطع بالظبط —— */
+    .hero {
+      width: var(--hero-w);
+      height: var(--hero-h);
+      margin: 0 auto;
+      border-radius: 14px;
+      padding: 3mm;
+      text-align: center;
+      background: rgba(30,107,184,0.12);
+      border: 2px dashed rgba(30,107,184,0.5);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2mm;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .hero .lab {
+      position: absolute; top: -2.8mm; right: 3mm;
+      background: var(--sky); color: #fff; font-size: 6.5pt; font-weight: 900;
+      padding: 0.5mm 2mm; border-radius: 999px;
+    }
+    .g-avatar {
+      width: var(--avatar); height: var(--avatar); border-radius: 50%;
+      border: 2px dashed rgba(240,200,74,0.8);
+      background: rgba(240,200,74,0.25);
+      font-size: 6pt; color: #8a6a10;
+    }
+    .g-name {
+      width: var(--name-w); height: var(--name-h); border-radius: 6px;
+      font-size: 6.5pt; color: var(--sky-deep);
+    }
+    .g-tag {
+      width: var(--tag-w); height: var(--tag-h); border-radius: 5px;
+      font-size: 6pt; color: var(--sky-deep);
+    }
+
+    .card {
+      width: var(--card-w);
+      height: var(--card-h);
+      margin: 3.5mm auto 0;
+      border-radius: 12px;
+      padding: 3mm;
+      background: rgba(255,255,255,0.7);
+      border: 2px dashed rgba(30,107,184,0.4);
+      position: relative;
+      box-sizing: border-box;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5mm;
+    }
+    .card.love {
+      height: var(--card-love-h);
+      justify-content: flex-start;
+      padding-top: 4mm;
+    }
+    .card .lab {
+      position: absolute; top: -2.6mm; right: 3mm;
+      background: var(--sky); color: #fff; font-size: 6pt; font-weight: 900;
+      padding: 0.4mm 2mm; border-radius: 999px;
+    }
+    .g-h2 {
+      width: var(--h2-w); height: var(--h2-h); border-radius: 5px;
+      font-size: 6pt;
+    }
+    .g-text {
+      width: var(--text-w); height: var(--text-h); border-radius: 5px;
+      font-size: 6pt;
+    }
+
+    .hobbies {
+      display: grid; grid-template-columns: var(--hobby-w) var(--hobby-w);
+      gap: 2.5mm; margin-top: 1.5mm; justify-content: center;
+    }
+    .hobby {
+      width: var(--hobby-w); height: var(--hobby-h);
+      border-radius: 10px; padding: 2mm;
+      background: rgba(244,249,255,0.7);
+      border: 2px dashed #7dd3fc;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2mm;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .hobby .htag {
+      position: absolute; top: -2.2mm; right: 1.5mm;
+      background: #0369a1; color: #fff; font-size: 5.5pt; font-weight: 900;
+      padding: 0.3mm 1.5mm; border-radius: 999px;
+    }
+    .g-icon {
+      width: var(--icon); height: var(--icon); border-radius: 4px; font-size: 5pt;
+    }
+    .g-htitle {
+      width: var(--htitle-w); height: var(--htitle-h); border-radius: 4px; font-size: 5pt;
+    }
+
+    .verse {
+      width: var(--verse-w); height: var(--verse-h);
+      margin: 3.5mm auto 0;
+      border-radius: 12px;
+      padding: 3mm;
+      background: rgba(255,248,224,0.55);
+      border: 2px dashed var(--sun-hot);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5mm;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .verse .lab {
+      position: absolute; top: -2.6mm; right: 3mm;
+      background: var(--sun-hot); color: var(--sky-deep); font-size: 6pt; font-weight: 900;
+      padding: 0.4mm 2mm; border-radius: 999px;
+    }
+    .g-quote {
+      width: var(--quote-w); height: var(--quote-h); border-radius: 5px; font-size: 6pt;
+    }
+    .g-cite {
+      width: var(--cite-w); height: var(--cite-h); border-radius: 4px; font-size: 5.5pt;
+    }
+
+    .g-btn {
+      width: var(--btn-w); height: var(--btn-h);
+      margin: 4mm auto 0; border-radius: 10px;
+      border: 2px dashed #c48a0e; background: rgba(240,200,74,0.25);
+      font-size: 7pt; color: #8a6a10; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+
+    .name-line {
+      margin-top: 3mm; font-weight: 800; font-size: 8pt; color: #64748b;
+    }
+    .name-line u {
+      border-bottom: 1.5px solid var(--sky); text-decoration: none;
+      display: inline-block; min-width: 40mm;
+    }
+    .tip {
+      margin-top: 2mm; font-size: 7pt; font-weight: 800; color: #64748b; line-height: 1.45;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .no-print { display: none !important; }
+      .sheet { margin: 0; box-shadow: none; width: auto; padding: 0; }
+      .page, .hero, .card, .hobby, .verse, .ghost, .g-btn {
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button onclick="window.print()">🖨️ اطبع لوحة صفحتي (صفحتين)</button>
+    <p>الفراغات = نفس مقاسات قطع الأيام بالظبط (safhati-theme.css) · Actual size 100%</p>
+  </div>
+
+  <div class="sheet">
+    <div class="head">
+      <h1>لوحة صفحتي — 1/2</h1>
+      <span>الرأس · عني · بحب</span>
+    </div>
+    <div class="page">
+      <div class="hero">
+        <span class="lab">الرأس · 164×48 مم</span>
+        <div class="ghost g-avatar">صورة<span class="mm">18×18</span></div>
+        <div class="ghost g-name">الاسم<span class="mm">55×9</span></div>
+        <div class="ghost g-tag">الجملة<span class="mm">60×7</span></div>
+      </div>
+
+      <div class="card">
+        <span class="lab">عني · 164×22 مم</span>
+        <div class="ghost g-h2">عنوان<span class="mm">35×7</span></div>
+        <div class="ghost g-text">النص<span class="mm">154×10</span></div>
+      </div>
+
+      <div class="card love">
+        <span class="lab">بحب · 164×58 مم</span>
+        <div class="ghost g-h2">عنوان<span class="mm">35×7</span></div>
+        <div class="hobbies">
+          <div class="hobby">
+            <span class="htag">1 · 76×22</span>
+            <div class="ghost g-icon">⚽<span class="mm">9×9</span></div>
+            <div class="ghost g-htitle">عنوان<span class="mm">28×6</span></div>
+          </div>
+          <div class="hobby">
+            <span class="htag">2 · 76×22</span>
+            <div class="ghost g-icon">🎨<span class="mm">9×9</span></div>
+            <div class="ghost g-htitle">عنوان<span class="mm">28×6</span></div>
+          </div>
+          <div class="hobby">
+            <span class="htag">3 · 76×22</span>
+            <div class="ghost g-icon">🎮<span class="mm">9×9</span></div>
+            <div class="ghost g-htitle">عنوان<span class="mm">28×6</span></div>
+          </div>
+          <div class="hobby">
+            <span class="htag">4 · 76×22</span>
+            <div class="ghost g-icon">📖<span class="mm">9×9</span></div>
+            <div class="ghost g-htitle">عنوان<span class="mm">28×6</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="name-line">اسمي: <u></u></p>
+  </div>
+
+  <div class="sheet">
+    <div class="head">
+      <h1>لوحة صفحتي — 2/2</h1>
+      <span>حلمي · الآية · الزر</span>
+    </div>
+    <div class="page">
+      <div class="card">
+        <span class="lab">حلمي · 164×22 مم</span>
+        <div class="ghost g-h2">عنوان<span class="mm">35×7</span></div>
+        <div class="ghost g-text">النص<span class="mm">154×10</span></div>
+      </div>
+
+      <div class="verse">
+        <span class="lab">الآية · 164×24 مم</span>
+        <div class="ghost g-quote">نص الآية<span class="mm">148×10</span></div>
+        <div class="ghost g-cite">المرجع<span class="mm">28×6</span></div>
+      </div>
+
+      <div class="ghost g-btn">الزر<span class="mm">45×12</span></div>
+    </div>
+    <p class="tip">
+      كل فراغ مكتوب عليه مقاسه بالمم — قصوا القطعة بنفس المقاس من ورقة اليوم والزقوها هنا.
+    </p>
+  </div>
+</body>
+</html>

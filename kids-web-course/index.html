@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>أنا أصنع صفحتي 🌐</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: linear-gradient(160deg, #e8f4ff 0%, #fff8e8 55%, #e8fff4 100%);
+      color: #1a2a3a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .hub {
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    p { font-size: 1.1rem; opacity: 0.85; margin: 0 0 32px; }
+    .cards { display: flex; flex-direction: column; gap: 16px; }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 8px 24px rgba(15, 61, 107, 0.12);
+      border: 3px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    a.card:hover { transform: translateY(-3px); border-color: #f0c84a; }
+    a.card strong { display: block; font-size: 1.35rem; margin-bottom: 6px; }
+    a.card span { font-size: 0.95rem; opacity: 0.75; }
+    .course { background: linear-gradient(135deg, #1e6bb8, #0f3d6b); color: #fff; }
+    .course span { opacity: 0.9; }
+    .materials { background: linear-gradient(135deg, #1f9d6a, #157a52); color: #fff; }
+    .materials span { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="hub">
+    <h1>🌐 أنا أصنع صفحتي</h1>
+    <p>كورس ويب + AI للأطفال — 8 حصص</p>
+    <div class="cards">
+      <a href="course/index.html" class="card course">
+        <strong>📽️ الكورس</strong>
+        <span>شرائح العرض على البروجektor — 8 محطات</span>
+      </a>
+      <a href="materials/index.html" class="card materials">
+        <strong>📦 المواد</strong>
+        <span>مطبوعات · واجبات · أمثلة نتيجة البرومبت</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

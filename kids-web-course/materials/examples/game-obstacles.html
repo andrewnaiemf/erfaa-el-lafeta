@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>تجنّب العقبات 🚗</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: #0b1f33;
+      color: #fff;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none;
+    }
+    .hud {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 12px 16px;
+      display: flex; justify-content: space-between;
+      background: rgba(0,0,0,0.45);
+      z-index: 10;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    #arena {
+      position: fixed;
+      inset: 0;
+      top: 48px;
+      bottom: 110px;
+      background: linear-gradient(180deg, #1a3a5c, #0f2740);
+      overflow: hidden;
+    }
+    .road {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(320px, 86%);
+      top: 0; bottom: 0;
+      background: #2d3748;
+      border-left: 6px solid #f0c84a;
+      border-right: 6px solid #f0c84a;
+    }
+    .player {
+      position: absolute;
+      bottom: 18px;
+      width: 56px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      transition: left 0.08s linear;
+      z-index: 5;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+    }
+    .player svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .obstacle {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      font-size: 2.2rem;
+      display: grid;
+      place-items: center;
+    }
+    .controls {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 110px;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+    .controls button {
+      width: 90px;
+      height: 70px;
+      font-size: 2rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 16px;
+      background: #f0c84a;
+      color: #0f3d6b;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(8, 20, 36, 0.94);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 30; text-align: center; padding: 24px;
+    }
+    .overlay.hidden { display: none; }
+    .btn {
+      font-family: inherit;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 14px;
+      background: #f0c84a;
+      color: #0f3d6b;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <span>🏃 تجنّب العقبات</span>
+    <span id="score">النقاط: 0</span>
+  </div>
+  <div id="arena">
+    <div class="road" id="road"></div>
+    <div class="player" id="player" aria-label="طفل">
+      <svg viewBox="0 0 56 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- شنطة -->
+        <rect x="38" y="28" width="14" height="18" rx="3" fill="#1e6bb8"/>
+        <rect x="40" y="30" width="10" height="8" rx="2" fill="#3aa0ff"/>
+        <path d="M45 28v-4" stroke="#f0c84a" stroke-width="2" stroke-linecap="round"/>
+        <!-- جسم + يونيفورم -->
+        <rect x="16" y="34" width="24" height="18" rx="6" fill="#1e6bb8"/>
+        <rect x="22" y="38" width="12" height="10" rx="2" fill="#fff"/>
+        <!-- رقبة -->
+        <rect x="24" y="30" width="8" height="6" fill="#f5c99a"/>
+        <!-- رأس -->
+        <circle cx="28" cy="22" r="12" fill="#f5c99a"/>
+        <!-- شعر -->
+        <path d="M17 20c2-8 14-10 22-4 2 2 3 6 2 9-3-4-10-6-16-4-4 1-7 4-8 7 0-3 1-6 2-8z" fill="#3d2914"/>
+        <!-- عيون -->
+        <circle cx="24" cy="22" r="1.6" fill="#1a2a3a"/>
+        <circle cx="32" cy="22" r="1.6" fill="#1a2a3a"/>
+        <!-- ابتسامة -->
+        <path d="M24 26q4 4 8 0" fill="none" stroke="#c47a4a" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- ساقين -->
+        <rect x="20" y="50" width="7" height="12" rx="3" fill="#2d3748"/>
+        <rect x="29" y="50" width="7" height="12" rx="3" fill="#2d3748"/>
+        <!-- حذاء -->
+        <ellipse cx="23.5" cy="61" rx="5" ry="2.5" fill="#111"/>
+        <ellipse cx="32.5" cy="61" rx="5" ry="2.5" fill="#111"/>
+      </svg>
+    </div>
+  </div>
+  <div class="controls">
+    <button type="button" id="rightBtn">يمين ➡️</button>
+    <button type="button" id="leftBtn">⬅️ شمال</button>
+  </div>
+
+  <div class="overlay" id="startScreen">
+    <h1>🏃 تجنّب العقبات</h1>
+    <p>حرّك الطفل يمين وشمال — متلمسش الحواجز!<br>كل حاجز تعدّيه = نقطة</p>
+    <button class="btn" type="button" id="startBtn">ابدأ 🚀</button>
+  </div>
+
+  <div class="overlay hidden" id="endScreen">
+    <h1>💥 اصطدمت!</h1>
+    <p id="endMsg"></p>
+    <button class="btn" type="button" id="againBtn">من جديد 🔄</button>
+  </div>
+
+  <script>
+    const arena = document.getElementById("arena");
+    const road = document.getElementById("road");
+    const player = document.getElementById("player");
+    const scoreEl = document.getElementById("score");
+    const startScreen = document.getElementById("startScreen");
+    const endScreen = document.getElementById("endScreen");
+
+    let lane = 1, score = 0, running = false;
+    let obstacles = [], loopId = null, spawnId = null;
+
+    function roadMetrics() {
+      const r = road.getBoundingClientRect();
+      const a = arena.getBoundingClientRect();
+      return {
+        left: r.left - a.left,
+        width: r.width,
+        height: a.height
+      };
+    }
+
+    function laneX(n) {
+      const m = roadMetrics();
+      const col = m.width / 3;
+      return m.left + col * n + col / 2 - 28;
+    }
+
+    function placePlayer() {
+      player.style.left = laneX(lane) + "px";
+    }
+
+    function move(dir) {
+      if (!running) return;
+      lane = Math.max(0, Math.min(2, lane + dir));
+      placePlayer();
+    }
+
+    function spawnObstacle() {
+      if (!running) return;
+      const el = document.createElement("div");
+      el.className = "obstacle";
+      el.textContent = Math.random() > 0.5 ? "🧱" : "🪨";
+      const obsLane = Math.floor(Math.random() * 3);
+      el.style.left = laneX(obsLane) + "px";
+      el.style.top = "-50px";
+      arena.appendChild(el);
+      obstacles.push({ el: el, lane: obsLane, y: -50, scored: false });
+    }
+
+    function loop() {
+      if (!running) return;
+      const m = roadMetrics();
+      const speed = 4 + Math.min(score * 0.15, 4);
+      const playerBottom = m.height - 18 - 64;
+      const playerTop = playerBottom;
+      const playerBottomEdge = m.height - 18;
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const o = obstacles[i];
+        o.y += speed;
+        o.el.style.top = o.y + "px";
+        o.el.style.left = laneX(o.lane) + "px";
+
+        const oBottom = o.y + 48;
+        if (!o.scored && oBottom > playerTop && o.y < playerBottomEdge && o.lane === lane) {
+          endGame();
+          return;
+        }
+        if (!o.scored && o.y > playerBottomEdge) {
+          o.scored = true;
+          score++;
+          scoreEl.textContent = "النقاط: " + score;
+        }
+        if (o.y > m.height + 20) {
+          o.el.remove();
+          obstacles.splice(i, 1);
+        }
+      }
+      loopId = requestAnimationFrame(loop);
+    }
+
+    function startGame() {
+      obstacles.forEach(function (o) { o.el.remove(); });
+      obstacles = [];
+      lane = 1; score = 0; running = true;
+      scoreEl.textContent = "النقاط: 0";
+      startScreen.classList.add("hidden");
+      endScreen.classList.add("hidden");
+      placePlayer();
+      clearInterval(spawnId);
+      spawnId = setInterval(spawnObstacle, 900);
+      cancelAnimationFrame(loopId);
+      loopId = requestAnimationFrame(loop);
+    }
+
+    function endGame() {
+      running = false;
+      clearInterval(spawnId);
+      cancelAnimationFrame(loopId);
+      document.getElementById("endMsg").textContent = "نقاطك: " + score;
+      endScreen.classList.remove("hidden");
+    }
+
+    document.getElementById("leftBtn").addEventListener("pointerdown", function (e) {
+      e.preventDefault(); move(-1);
+    });
+    document.getElementById("rightBtn").addEventListener("pointerdown", function (e) {
+      e.preventDefault(); move(1);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft" || e.key === "a") move(-1);
+      if (e.key === "ArrowRight" || e.key === "d") move(1);
+    });
+    window.addEventListener("resize", placePlayer);
+    document.getElementById("startBtn").addEventListener("click", startGame);
+    document.getElementById("againBtn").addEventListener("click", startGame);
+  </script>
+</body>
+</html>

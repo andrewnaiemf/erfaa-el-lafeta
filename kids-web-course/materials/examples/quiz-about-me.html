@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مين يعرف أندرو؟</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: linear-gradient(160deg, #e8f4ff, #fff8e8);
+      color: #1a2a3a;
+      padding: 20px 16px 40px;
+    }
+    .game { max-width: 480px; margin: 0 auto; text-align: center; }
+    h1 { font-size: 1.6rem; color: #0f3d6b; margin: 0 0 8px; }
+    .score { font-size: 1.1rem; font-weight: 800; color: #1f9d6a; margin-bottom: 20px; }
+    .question {
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 8px 24px rgba(15,61,107,0.1);
+      margin-bottom: 16px;
+    }
+    .question p { font-size: 1.25rem; font-weight: 800; margin: 0 0 16px; line-height: 1.5; }
+    .choices { display: grid; gap: 10px; }
+    button.choice {
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: 800;
+      padding: 16px;
+      border: 3px solid #c5e0f5;
+      border-radius: 14px;
+      background: #f4f9ff;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    button.choice:hover:not(:disabled) { background: #e0f0ff; transform: scale(1.02); }
+    button.choice:disabled { cursor: default; opacity: 0.85; }
+    button.choice.correct { background: #d4f5e4; border-color: #1f9d6a; color: #157a52; }
+    button.choice.wrong { background: #ffe0e0; border-color: #e05050; color: #a03030; }
+    .feedback { font-size: 1.4rem; font-weight: 900; min-height: 2rem; margin: 12px 0; }
+    .result { background: #fff; border-radius: 20px; padding: 28px; box-shadow: 0 8px 24px rgba(15,61,107,0.1); }
+    .result h2 { color: #0f3d6b; margin: 0 0 12px; }
+    .btn-main {
+      font-family: inherit;
+      font-size: 1.15rem;
+      font-weight: 900;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f0c84a, #e8a317);
+      color: #0f3d6b;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <h1>❓ مين يعرف أندرو؟</h1>
+    <p class="score" id="scoreLine">السؤال 1 من 5</p>
+
+    <div id="playArea">
+      <div class="question">
+        <p id="qText"></p>
+        <div class="choices" id="choices"></div>
+      </div>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </div>
+
+    <div id="endArea" class="result hidden">
+      <h2>🎉 خلصنا!</h2>
+      <p id="finalScore" style="font-size:1.3rem;font-weight:800;"></p>
+      <button class="btn-main" type="button" id="restart">🔄 من جديد</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "لوني المفضل؟", options: ["أزرق", "أحمر", "أخضر", "أصفر"], correct: 0 },
+      { q: "بحب؟", options: ["كرة القدم", "سباحة", "طبخ", "شطرنج"], correct: 0 },
+      { q: "عندي كام سنة؟", options: ["8", "9", "10", "11"], correct: 1 },
+      { q: "حلمي؟", options: ["أعمل لعبة ويب", "طيار", "طبيب", "معلم"], correct: 0 },
+      { q: "كنيستي؟", options: ["مارجرجس مطار النزهة", "مكان تاني", "مكان تالت", "مكان رابع"], correct: 0 }
+    ];
+
+    let idx = 0, points = 0, locked = false;
+
+    const qText = document.getElementById("qText");
+    const choicesEl = document.getElementById("choices");
+    const feedback = document.getElementById("feedback");
+    const scoreLine = document.getElementById("scoreLine");
+    const playArea = document.getElementById("playArea");
+    const endArea = document.getElementById("endArea");
+    const finalScore = document.getElementById("finalScore");
+
+    function render() {
+      locked = false;
+      feedback.textContent = "";
+      const item = questions[idx];
+      qText.textContent = item.q;
+      scoreLine.textContent = "السؤال " + (idx + 1) + " من " + questions.length + " · النقاط: " + points;
+      choicesEl.innerHTML = "";
+      item.options.forEach(function (opt, i) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice";
+        btn.textContent = opt;
+        btn.addEventListener("click", function () { pick(i); });
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    function pick(i) {
+      if (locked) return;
+      locked = true;
+      const item = questions[idx];
+      const buttons = choicesEl.querySelectorAll("button");
+      buttons.forEach(function (b, j) {
+        b.disabled = true;
+        if (j === item.correct) b.classList.add("correct");
+        else if (j === i) b.classList.add("wrong");
+      });
+      if (i === item.correct) {
+        points++;
+        feedback.textContent = "✅ صح!";
+      } else {
+        feedback.textContent = "❌ غلط — نكمّل!";
+      }
+      setTimeout(function () {
+        idx++;
+        if (idx >= questions.length) showEnd();
+        else render();
+      }, 1200);
+    }
+
+    function showEnd() {
+      playArea.classList.add("hidden");
+      endArea.classList.remove("hidden");
+      finalScore.textContent = "نتيجتك: " + points + " من " + questions.length;
+    }
+
+    document.getElementById("restart").addEventListener("click", function () {
+      idx = 0; points = 0;
+      playArea.classList.remove("hidden");
+      endArea.classList.add("hidden");
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+/* كورس أنا أصنع صفحتي — عرض حصص 90–120 دقيقة */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body.lesson {
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(31, 157, 106, 0.12), transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(43, 108, 176, 0.12), transparent 45%),
+    linear-gradient(165deg, #e8f4f1 0%, #f0f4ff 50%, #fdf6e8 100%);
+  color: #1e3a3a;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+/* ── شريط علوي ── */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.top-bar .course-name {
+  font-weight: 900;
+  color: #1e4f86;
+  font-size: 1.1rem;
+}
+
+.top-bar .session-time {
+  background: #fff8e8;
+  border: 2px solid #e6d19a;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #6b5210;
+}
+
+.slide {
+  background: #fff;
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 40px);
+  margin-bottom: 18px;
+  box-shadow: 0 12px 36px rgba(30,58,58,0.08);
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.slide.hero {
+  background: linear-gradient(135deg, #1e4f86 0%, #2b6cb0 40%, #1f9d6a 100%);
+  color: #fff;
+  padding: clamp(32px, 5vw, 56px);
+}
+
+.slide.hero h1 { color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.slide.hero .lead { color: rgba(255,255,255,0.95); }
+.slide.hero .badge { background: rgba(255,255,255,0.25); color: #fff; border: 2px solid rgba(255,255,255,0.4); }
+
+.badge {
+  display: inline-block;
+  background: #eef5fb;
+  color: #1e4f86;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  color: #1e4f86;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  color: #147a50;
+  margin-bottom: 14px;
+}
+
+h3 {
+  font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+  color: #1e4f86;
+  margin-bottom: 10px;
+}
+
+.lead {
+  font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+  color: #4a6868;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* ── خريطة الرحلة (8 محطات) ── */
+.roadmap {
+  text-align: right;
+  padding: 28px;
+}
+
+.roadmap-title {
+  text-align: center;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 900;
+  color: #1e4f86;
+  margin-bottom: 20px;
+}
+
+.journey {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .journey { grid-template-columns: repeat(2, 1fr); }
+}
+
+.station {
+  background: #f4faf8;
+  border: 2px solid #d5ebe3;
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.station .num {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  background: #cbd5e0;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 900;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.station .label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #4a6868;
+  line-height: 1.3;
+}
+
+.station.done {
+  background: #eaf6f1;
+  border-color: #1f9d6a;
+}
+.station.done .num { background: #1f9d6a; }
+
+.station.current {
+  background: linear-gradient(180deg, #fff8e8, #fff);
+  border: 3px solid #d4a017;
+  box-shadow: 0 8px 24px rgba(212, 160, 23, 0.35);
+  transform: scale(1.05);
+  z-index: 2;
+}
+.station.current .num {
+  background: linear-gradient(180deg, #f0c84a, #d4a017);
+  animation: pulse 1.5s ease infinite;
+}
+
+.station.future { opacity: 0.55; }
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* ── هدف النهاردة / وجهة الكورس ── */
+.destination {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+}
+
+@media (max-width: 700px) {
+  .destination { grid-template-columns: 1fr; }
+}
+
+.dest-box {
+  padding: 20px;
+  border-radius: 18px;
+  font-weight: 800;
+}
+
+.dest-box.start {
+  background: #eef5fb;
+  border: 3px solid #2b6cb0;
+  color: #1e4f86;
+}
+
+.dest-box.end {
+  background: linear-gradient(180deg, #eaf6f1, #d4f0e4);
+  border: 3px solid #1f9d6a;
+  color: #147a50;
+}
+
+.dest-box .icon { font-size: 2.5rem; margin-bottom: 8px; }
+.dest-box .title { font-size: 1.2rem; margin-bottom: 6px; }
+.dest-box .desc { font-size: 0.95rem; font-weight: 700; opacity: 0.9; }
+
+.dest-arrow {
+  font-size: 2.5rem;
+  color: #d4a017;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-8px); }
+}
+
+.vision-finale {
+  background: linear-gradient(135deg, #1f4f86, #147a50);
+  color: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  margin-top: 16px;
+}
+
+.vision-finale h3 { color: #fff; font-size: 1.4rem; margin-bottom: 12px; }
+.vision-finale ul {
+  list-style: none;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.9;
+}
+
+.vision-finale li::before { content: "🌟 "; }
+
+/* ── جدول الحصة 90–120 د ── */
+.agenda {
+  text-align: right;
+}
+
+.agenda-item {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 2px dashed #e2e8f0;
+}
+
+.agenda-item:last-child { border-bottom: none; }
+
+.agenda-time {
+  background: #1e4f86;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.agenda-body h3 { margin: 0 0 4px; text-align: right; color: #147a50; }
+.agenda-body p { font-weight: 700; color: #4a6868; font-size: 0.95rem; line-height: 1.5; }
+
+/* ── بطاقات محتوى ── */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+.piece {
+  background: linear-gradient(180deg, #f3fbf7, #eaf6f1);
+  border: 3px solid #b7e0cf;
+  border-radius: 18px;
+  padding: 24px 14px;
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-weight: 800;
+  transition: transform 0.15s;
+}
+
+.piece:hover { transform: translateY(-4px); }
+
+.piece.hot {
+  background: linear-gradient(180deg, #fff8e8, #fff3d6);
+  border-color: #e6d19a;
+}
+
+.game-box {
+  background: linear-gradient(160deg, #f0f4ff, #eef5fb);
+  border: 3px solid #2b6cb0;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: right;
+}
+
+.game-box .prize {
+  display: inline-block;
+  background: #d4a017;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.activity { text-align: right; }
+
+.activity ol, .activity ul {
+  font-size: clamp(1.05rem, 2.3vw, 1.35rem);
+  line-height: 1.85;
+  padding-right: 24px;
+  font-weight: 700;
+}
+
+.activity li { margin-bottom: 8px; }
+
+.takeaway {
+  background: linear-gradient(180deg, #fff8e8, #fff);
+  border: 3px solid #e6d19a;
+}
+
+.takeaway p {
+  font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+  margin: 8px 0;
+  font-weight: 700;
+}
+
+.homework {
+  color: #6b5210;
+  margin-top: 16px !important;
+  background: #fff8e8;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.code {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 20px;
+  border-radius: 14px;
+  text-align: left;
+  direction: ltr;
+  font-family: "Consolas", monospace;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  line-height: 1.65;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  text-align: right;
+}
+
+.bad, .good {
+  padding: 20px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.5;
+}
+
+.bad { background: #fee; border: 3px solid #fcc; }
+.good { background: #efe; border: 3px solid #9c9; }
+
+.quote-box {
+  background: linear-gradient(105deg, #fff8e8, #fff3d6);
+  border-right: 6px solid #d4a017;
+  padding: 20px 24px;
+  border-radius: 0 16px 16px 0;
+  text-align: right;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #6b5210;
+  font-style: italic;
+}
+
+.team-chant {
+  background: #147a50;
+  color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 0 32px;
+}
+
+.nav a {
+  background: #2b6cb0;
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.nav a.gold {
+  background: linear-gradient(180deg, #f0c84a, #d4a017);
+  box-shadow: 0 4px 0 #9a740c;
+}
+
+@media (max-width: 600px) {
+  .compare { grid-template-columns: 1fr; }
+  .destination { gap: 8px; }
+  .dest-arrow { transform: rotate(90deg); }
+}

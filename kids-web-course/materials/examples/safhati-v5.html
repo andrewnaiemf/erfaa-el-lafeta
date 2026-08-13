@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>صفحتي 2 — أندرو ✨</title>
+  <style>
+    :root {
+      --navy: #071833;
+      --sky: #1e6bb8;
+      --sky-bright: #3aa0ff;
+      --gold: #f0c84a;
+      --gold-hot: #e8a317;
+      --mint: #22c58a;
+      --pink: #ff6b9d;
+      --ink: #e8f1ff;
+      --muted: #9bb4d0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 70% 50% at 90% -10%, rgba(240, 200, 74, 0.22), transparent 55%),
+        radial-gradient(ellipse 60% 45% at -10% 80%, rgba(58, 160, 255, 0.2), transparent 50%),
+        linear-gradient(165deg, #04101f 0%, #0b2744 45%, #071833 100%);
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 12% 18%, #fff, transparent),
+        radial-gradient(2px 2px at 78% 22%, #f0c84a, transparent),
+        radial-gradient(1.5px 1.5px at 62% 70%, #fff, transparent),
+        radial-gradient(2px 2px at 28% 82%, #8ec8ff, transparent),
+        radial-gradient(1.5px 1.5px at 90% 88%, #fff, transparent);
+      opacity: 0.55;
+    }
+
+    .wrap {
+      position: relative;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 18px 56px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #f0c84a, #ff9f43);
+      color: #071833;
+      font-weight: 900;
+      font-size: 0.82rem;
+      padding: 8px 16px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(240, 200, 74, 0.35);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(30, 107, 184, 0.55), rgba(7, 24, 51, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      padding: 36px 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -80px;
+      top: -90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 200, 74, 0.35), transparent 70%);
+    }
+
+    .avatar-wrap {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .avatar {
+      width: 128px;
+      height: 128px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 4rem;
+      background: linear-gradient(180deg, var(--gold), var(--gold-hot));
+      border: 6px solid #fff;
+      box-shadow: 0 0 0 8px rgba(240, 200, 74, 0.25), 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 6vw, 3rem);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero .tagline {
+      margin: 0 0 22px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      position: relative;
+      z-index: 1;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      padding: 12px 16px;
+      min-width: 110px;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .stat:hover {
+      transform: translateY(-6px);
+      background: rgba(240, 200, 74, 0.15);
+      box-shadow: 0 12px 28px rgba(240, 200, 74, 0.2);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      color: var(--gold);
+    }
+
+    .stat span {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 24px 22px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .panel:hover {
+      transform: translateY(-4px);
+      border-color: rgba(240, 200, 74, 0.4);
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.32);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+      color: #fff;
+    }
+
+    .panel p {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      font-weight: 600;
+      color: #d7e6f7;
+    }
+
+    .facts {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .facts li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .facts li:last-child { border-bottom: none; }
+
+    .facts li::before {
+      content: "✦";
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    .hobbies {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .hobbies li {
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 20px;
+      padding: 22px 14px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: default;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+
+    .hobbies li:hover {
+      transform: translateY(-8px) scale(1.04);
+      box-shadow: 0 18px 36px rgba(58, 160, 255, 0.28);
+      background: linear-gradient(180deg, rgba(58, 160, 255, 0.25), rgba(255,255,255,0.06));
+    }
+
+    .hobbies .icon {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .dream {
+      margin-top: 18px;
+      background: linear-gradient(120deg, #1e6bb8, #6b46c1 55%, #c05621);
+      border: none;
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .dream:hover { transform: translateY(-4px); }
+
+    .dream p {
+      font-size: 1.25rem;
+      color: #fff;
+    }
+
+    .verse {
+      margin-top: 18px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(240, 200, 74, 0.16), rgba(255,255,255,0.05));
+      border: 2px solid rgba(240, 200, 74, 0.45);
+    }
+
+    .verse p {
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .verse .ref {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .cta {
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 1.3rem;
+      font-weight: 900;
+      padding: 18px 42px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #071833;
+      background: linear-gradient(180deg, #ffe082, #f0c84a 40%, #e8a317);
+      box-shadow: 0 10px 0 #b8860b, 0 18px 40px rgba(240, 200, 74, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    }
+
+    button:hover {
+      transform: scale(1.08) translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 14px 0 #b8860b, 0 28px 50px rgba(240, 200, 74, 0.5);
+    }
+
+    button:active {
+      transform: scale(1.02) translateY(6px);
+      box-shadow: 0 4px 0 #b8860b;
+    }
+
+    #hello {
+      min-height: 1.6em;
+      margin-top: 16px;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--mint);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 36px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    @media (min-width: 720px) {
+      .hero { grid-template-columns: 160px 1fr; text-align: right; }
+      .avatar-wrap { text-align: center; }
+      .grid { grid-template-columns: 1.1fr 1fr; }
+      .dream, .verse { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="wrap">
+    <span class="badge">✨ نتيجة برومبت الحصة 5 — صفحتي النسخة الأقوى</span>
+
+    <header class="hero">
+      <div class="avatar-wrap">
+        <div class="avatar">👦</div>
+      </div>
+      <div>
+        <h1>أنا أندرو</h1>
+        <p class="tagline">صانع صفحات ويب · النسخة 2.0</p>
+        <div class="stats">
+          <div class="stat"><strong>9</strong><span>سنين</span></div>
+          <div class="stat"><strong>4</strong><span>هوايات</span></div>
+          <div class="stat"><strong>1</strong><span>حلم كبير</span></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>👋 عني</h2>
+        <p>بحب أتعلم وأعمل حاجات تظهر على الشاشة. الكورس علّمني إن الصفحة = قطع… والنهاردة القطع بقت ألطف.</p>
+        <ul class="facts">
+          <li>عندي 9 سنين</li>
+          <li>كنيستي: مارجرجس مطار النزهة</li>
+          <li>بلون الأزرق والذهبي</li>
+          <li>بحب أشرح لأصحابي اللي عملته</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2>❤️ بحب</h2>
+        <ul class="hobbies">
+          <li><span class="icon">⚽</span>كرة القدم</li>
+          <li><span class="icon">🎨</span>الرسم</li>
+          <li><span class="icon">🎮</span>الألعاب</li>
+          <li><span class="icon">📖</span>القصص</li>
+        </ul>
+      </section>
+
+      <section class="panel dream">
+        <h2>🎯 حلمي</h2>
+        <p>أعمل لعبة ويب لأصحابي في الكنيسة… ويقدروا يلعبوها من غير ما أشرح لهم زر واحد!</p>
+      </section>
+
+      <section class="panel verse">
+        <h2>📖 آية بحبها</h2>
+        <p>«تمسّك بما عندك لئلا يأخذ أحد إكليلك»</p>
+        <p class="ref">رؤيا 3: 11</p>
+      </section>
+    </div>
+
+    <div class="cta">
+      <button type="button" id="sayHi">قل مرحبًا 👋</button>
+      <p id="hello" aria-live="polite"></p>
+    </div>
+
+    <p class="footer">صفحتي 2.0 — حصة 5 · أنا أصنع صفحتي</p>
+  </div>
+
+  <script>
+    const messages = [
+      "مرحبًا! دي النسخة الأقوى من صفحتي ✨",
+      "جرب تمرّر الماوس على الهوايات… بتطلع لفوق!",
+      "يا مرحب! نورت عالمي 🚀"
+    ];
+    let i = 0;
+    document.getElementById("sayHi").addEventListener("click", function () {
+      document.getElementById("hello").textContent = messages[i++ % messages.length];
+    });
+  </script>
+</body>
+</html>

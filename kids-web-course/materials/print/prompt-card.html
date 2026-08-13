@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>بطاقة البرومبت — للطباعة</title>
+  <style>
+    @media print { .no-print { display: none; } body { background: #fff; } }
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      padding: 20px;
+      background: #eef5fb;
+    }
+    .sheet {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border: 4px solid #2b6cb0;
+      border-radius: 20px;
+      padding: 28px;
+    }
+    h1 { color: #1e4f86; text-align: center; font-size: 1.8rem; }
+    .sub { text-align: center; color: #666; margin-bottom: 24px; }
+    .field {
+      margin: 16px 0;
+      padding: 16px;
+      border: 2px dashed #c5d8ef;
+      border-radius: 12px;
+      min-height: 56px;
+    }
+    .field label {
+      display: block;
+      font-weight: 800;
+      color: #1e4f86;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+    .line {
+      border-bottom: 2px dotted #ccc;
+      min-height: 28px;
+    }
+    .no-print { text-align: center; margin: 16px; }
+    .no-print button {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      background: #2b6cb0;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print"><button onclick="window.print()">🖨️ طباعة (واحدة لكل طفل)</button></div>
+  <div class="sheet">
+    <h1>🤖 بطاقة البرومبت</h1>
+    <p class="sub">املأ قبل ما تكلم AI</p>
+
+    <div class="field">
+      <label>1️⃣ إيه اللي عايز تعمله؟</label>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <div class="field">
+      <label>2️⃣ لمين؟ (أطفال / أصحابي / خلوة…)</label>
+      <div class="line"></div>
+    </div>
+    <div class="field">
+      <label>3️⃣ فيها إيه؟ (عنوان، أزرار، صورة…)</label>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <div class="field">
+      <label>4️⃣ الألوان؟</label>
+      <div class="line"></div>
+    </div>
+    <div class="field">
+      <label>5️⃣ عربي من اليمين لليسار؟</label>
+      <div class="line"></div>
+    </div>
+
+    <p style="text-align:center;margin-top:20px;font-weight:800;color:#147a50;">
+      ✨ اكتب جملة واحدة طويلة تجمع كل ده — دي رسالتك للAI
+    </p>
+  </div>
+</body>
+</html>

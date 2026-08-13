@@ -1,0 +1,59 @@
+/* مقاسات القصّ واللصق — مصدر واحد للوحة + قطع الأيام 1–3
+   غيّر هنا مرة واحدة تنعكس في الكل */
+:root {
+  --sky: #1e6bb8;
+  --sky-deep: #0f3d6b;
+  --sun: #f0c84a;
+  --sun-hot: #e8a317;
+  --mint: #1f9d6a;
+  --cloud: #f4f9ff;
+  --ink: #1a2a3a;
+
+  --page-w: 170mm;
+
+  /* الرأس (الإطار الأزرق) */
+  --hero-w: 164mm;
+  --hero-h: 48mm;
+
+  --avatar: 18mm;
+
+  --name-w: 55mm;
+  --name-h: 9mm;
+
+  --tag-w: 60mm;
+  --tag-h: 7mm;
+
+  /* كرت القسم (عني / بحب / حلمي) */
+  --card-w: 164mm;
+  --card-h: 22mm;
+  --card-love-h: 58mm;
+
+  --h2-w: 35mm;
+  --h2-h: 7mm;
+
+  --text-w: 154mm;
+  --text-h: 10mm;
+
+  /* هواية = إطار + أيقونة + عنوان */
+  --hobby-w: 76mm;
+  --hobby-h: 22mm;
+
+  --icon: 9mm;
+
+  --htitle-w: 28mm;
+  --htitle-h: 6mm;
+
+  /* الآية */
+  --verse-w: 164mm;
+  --verse-h: 24mm;
+
+  --quote-w: 148mm;
+  --quote-h: 10mm;
+
+  --cite-w: 28mm;
+  --cite-h: 6mm;
+
+  /* الزر */
+  --btn-w: 45mm;
+  --btn-h: 12mm;
+}

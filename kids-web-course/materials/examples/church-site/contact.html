@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تواصل معنا — مركز الملاك ميخائيل</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="top-bar">كنيسة مارجرجس والأميرة تادرس — مطار النزهة</div>
+
+  <header class="site-header">
+    <div class="angel">👼</div>
+    <h1>مركز الملاك ميخائيل</h1>
+    <p>نورتونا — يسعدنا نسمع منكم</p>
+  </header>
+
+  <nav class="main-nav">
+    <a href="index.html">الرئيسية</a>
+    <a href="activities.html">الأنشطة</a>
+    <a href="contact.html" class="active">تواصل معنا</a>
+  </nav>
+
+  <main>
+    <h2>📬 تواصل معنا</h2>
+
+    <div class="contact-box">
+      <p><strong>📍 المكان:</strong> كنيسة مارجرجس والأميرة تادرس — مطار النزهة</p>
+      <p><strong>👼 المركز:</strong> مركز الملاك ميخائيل</p>
+      <p style="margin-bottom:20px;">أهلاً بالأطفال وأهلهم — ابعتولنا رسالة بسيطة!</p>
+
+      <form class="simple-form" id="msgForm">
+        <label for="name">اسمك</label>
+        <input type="text" id="name" name="name" placeholder="مثلاً: أندرو" />
+        <label for="message">رسالتك</label>
+        <textarea id="message" name="message" rows="3" placeholder="اكتب جملة حلوة..."></textarea>
+        <button type="submit">ابعت الرسالة ✉️</button>
+      </form>
+      <p id="thanks">شكرًا! استلمنا كلامك 🎉</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    مركز الملاك ميخائيل · كنيسة مارجرجس والأميرة تادرس — مطار النزهة
+  </footer>
+
+  <script>
+    document.getElementById("msgForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      document.getElementById("thanks").style.display = "block";
+      this.querySelector("button").disabled = true;
+    });
+  </script>
+</body>
+</html>

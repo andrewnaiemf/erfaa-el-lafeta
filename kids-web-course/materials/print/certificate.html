@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>شهادة — صانع صفحات</title>
+  <style>
+    @media print {
+      .no-print { display: none; }
+      .cert { box-shadow: none; }
+    }
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f0f4ff;
+      padding: 20px;
+      text-align: center;
+    }
+    .cert {
+      max-width: 700px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #fffef8, #fff);
+      border: 8px double #d4a017;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+    }
+    h1 { font-size: 2.2rem; color: #1e4f86; margin: 12px 0; }
+    .name-line {
+      font-size: 1.8rem;
+      border-bottom: 3px solid #2b6cb0;
+      min-width: 280px;
+      display: inline-block;
+      margin: 20px 0;
+      padding: 8px 24px;
+      color: #147a50;
+      font-weight: 900;
+    }
+    p { font-size: 1.15rem; line-height: 1.7; color: #333; font-weight: 700; }
+    .stars { font-size: 2rem; letter-spacing: 8px; margin: 16px 0; }
+    .no-print button {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      background: #d4a017;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+      margin: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button onclick="window.print()">🖨️ طباعة الشهادات</button>
+    <p>اكتب اسم كل طفل في الخط قبل الطباعة (أو اطبع فارغة واملأ بالقلم)</p>
+  </div>
+  <div class="cert">
+    <div class="stars">⭐ 🌐 ⭐</div>
+    <h1>شهادة إنجاز</h1>
+    <p>نشهد أن</p>
+    <div class="name-line">_______________</div>
+    <p>أتم بنجاح كورس<br><strong>«أنا أصنع صفحتي»</strong></p>
+    <p>وتعلّم أساسيات HTML و CSS<br>واستخدم الذكاء الاصطناعي لبناء صفحة ويب</p>
+    <p style="margin-top:24px;color:#666;">🎉 مبروك يا صانع صفحات صغير!</p>
+  </div>
+</body>
+</html>

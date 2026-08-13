@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ذاكرة الكوتشينة 🂡</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: #fff;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(240, 200, 74, 0.18), transparent 50%),
+        linear-gradient(160deg, #14532d 0%, #166534 40%, #0f3d2a 100%);
+      padding: 12px 12px 28px;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    h1 { margin: 6px 0 4px; font-size: 1.45rem; }
+    .sub { margin: 0 0 10px; font-weight: 700; opacity: 0.9; font-size: 0.95rem; }
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 800;
+      margin: 0 0 14px;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+    }
+    .board {
+      display: grid;
+      gap: 8px;
+      justify-content: center;
+    }
+    .card {
+      width: 100%;
+      aspect-ratio: 5 / 7;
+      border: none;
+      padding: 0;
+      background: transparent;
+      perspective: 700px;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card:disabled { cursor: default; }
+    .inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.38s ease;
+    }
+    .card.flipped .inner { transform: rotateY(180deg); }
+    .card.matched .inner { transform: rotateY(180deg); }
+    .card.matched { cursor: default; }
+    .card.matched .front {
+      box-shadow: 0 0 0 3px #f0c84a, 0 6px 16px rgba(0,0,0,0.25);
+    }
+    .face {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+    .back {
+      background:
+        repeating-linear-gradient(45deg, #1e3a8a 0 8px, #1d4ed8 8px 16px);
+      border: 3px solid #f0c84a;
+      box-shadow: 0 4px 0 #0b3a1f, 0 6px 14px rgba(0,0,0,0.3);
+    }
+    .back::after {
+      content: "🂠";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      color: #fde68a;
+      text-shadow: 0 2px 0 rgba(0,0,0,0.3);
+    }
+    .front {
+      background: #fff;
+      transform: rotateY(180deg);
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+      color: #111;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 5px 6px;
+    }
+    .front.red { color: #dc2626; }
+    .front.black { color: #111827; }
+    .corner {
+      font-weight: 900;
+      font-size: clamp(0.7rem, 2.6vw, 1.05rem);
+      line-height: 1.05;
+      text-align: center;
+    }
+    .corner small { display: block; font-size: 0.85em; }
+    .corner.bl { transform: rotate(180deg); }
+    .suit-big {
+      display: grid;
+      place-items: center;
+      font-size: clamp(1.3rem, 5vw, 2.4rem);
+      line-height: 1;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 28, 18, 0.94);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      padding: 24px;
+      text-align: center;
+    }
+    .overlay.hidden { display: none; }
+    .overlay h1 { font-size: 1.7rem; }
+    .overlay p { font-weight: 700; font-size: 1.05rem; opacity: 0.92; max-width: 360px; }
+    .btn {
+      font-family: inherit;
+      font-size: 1.15rem;
+      font-weight: 900;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f0c84a, #e8a317);
+      color: #0f3d2a;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+    .levels-preview {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      width: min(320px, 90vw);
+      margin-top: 12px;
+    }
+    .levels-preview span {
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 8px 0;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🂡 ذاكرة الكوتشينة</h1>
+    <p class="sub">اقلب كارتين متشابهين — 10 مستويات</p>
+    <div class="hud">
+      <span id="levelEl">المستوى 1 / 10</span>
+      <span id="moves">الحركات: 0</span>
+      <span id="pairs">الأزواج: 0</span>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="overlay" id="startScreen">
+    <h1>🂡 ذاكرة الكوتشينة</h1>
+    <p>كروت كوتشينة حقيقية. اقلب كارتين زي بعض.<br>10 مستويات — كل مستوى أصعب شوية.</p>
+    <div class="levels-preview">
+      <span>1 · 2</span><span>2 · 3</span><span>3 · 4</span><span>4 · 6</span><span>5 · 8</span>
+      <span>6 · 10</span><span>7 · 12</span><span>8 · 15</span><span>9 · 18</span><span>10 · 20</span>
+    </div>
+    <button class="btn" type="button" id="startBtn">ابدأ المستوى 1 🚀</button>
+  </div>
+
+  <div class="overlay hidden" id="levelScreen">
+    <h1 id="levelTitle">🎉 برافو!</h1>
+    <p id="levelMsg"></p>
+    <button class="btn" type="button" id="nextBtn">المستوى التالي ←</button>
+  </div>
+
+  <div class="overlay hidden" id="winScreen">
+    <h1>🏆 كسبت كل المستويات!</h1>
+    <p id="winMsg"></p>
+    <button class="btn" type="button" id="againBtn">العب من الأول 🔄</button>
+  </div>
+
+  <script>
+    const SUITS = [
+      { s: "♥", color: "red" },
+      { s: "♦", color: "red" },
+      { s: "♠", color: "black" },
+      { s: "♣", color: "black" }
+    ];
+    const RANKS = ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5"];
+    const DECK = [];
+    RANKS.forEach(function (rank) {
+      SUITS.forEach(function (suit) {
+        DECK.push({ rank: rank, suit: suit.s, color: suit.color, key: rank + suit.s });
+      });
+    });
+
+    const LEVELS = [
+      { pairs: 2, cols: 2 },
+      { pairs: 3, cols: 3 },
+      { pairs: 4, cols: 4 },
+      { pairs: 6, cols: 4 },
+      { pairs: 8, cols: 4 },
+      { pairs: 10, cols: 5 },
+      { pairs: 12, cols: 4 },
+      { pairs: 15, cols: 5 },
+      { pairs: 18, cols: 6 },
+      { pairs: 20, cols: 5 }
+    ];
+
+    let level = 0, cards = [], first = null, lock = false, moves = 0, pairs = 0, totalMoves = 0;
+
+    const board = document.getElementById("board");
+    const levelEl = document.getElementById("levelEl");
+    const movesEl = document.getElementById("moves");
+    const pairsEl = document.getElementById("pairs");
+    const startScreen = document.getElementById("startScreen");
+    const levelScreen = document.getElementById("levelScreen");
+    const winScreen = document.getElementById("winScreen");
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    function startFromBeginning() {
+      level = 0;
+      totalMoves = 0;
+      startScreen.classList.add("hidden");
+      winScreen.classList.add("hidden");
+      levelScreen.classList.add("hidden");
+      startLevel();
+    }
+
+    function startLevel() {
+      const cfg = LEVELS[level];
+      const picked = shuffle(DECK).slice(0, cfg.pairs);
+      const doubled = [];
+      picked.forEach(function (p, i) {
+        doubled.push({ id: i + "-a", key: p.key, rank: p.rank, suit: p.suit, color: p.color, open: false, matched: false });
+        doubled.push({ id: i + "-b", key: p.key, rank: p.rank, suit: p.suit, color: p.color, open: false, matched: false });
+      });
+      cards = shuffle(doubled);
+      first = null;
+      lock = false;
+      moves = 0;
+      pairs = 0;
+      levelEl.textContent = "المستوى " + (level + 1) + " / 10";
+      movesEl.textContent = "الحركات: 0";
+      pairsEl.textContent = "الأزواج: 0 / " + cfg.pairs;
+      board.style.gridTemplateColumns = "repeat(" + cfg.cols + ", minmax(0, 1fr))";
+      board.style.maxWidth = cfg.cols <= 4 ? "440px" : (cfg.cols === 5 ? "560px" : "680px");
+      board.style.margin = "0 auto";
+      renderBoard();
+    }
+
+    function renderBoard() {
+      board.innerHTML = "";
+      cards.forEach(function (card, index) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "card";
+        btn.setAttribute("aria-label", "كارت");
+        btn.innerHTML =
+          '<div class="inner">' +
+            '<div class="face back"></div>' +
+            '<div class="face front ' + card.color + '">' +
+              '<div class="corner">' + card.rank + "<small>" + card.suit + "</small></div>" +
+              '<div class="suit-big">' + card.suit + "</div>" +
+              '<div class="corner bl">' + card.rank + "<small>" + card.suit + "</small></div>" +
+            "</div>" +
+          "</div>";
+        card.el = btn;
+        btn.addEventListener("pointerdown", function (e) {
+          e.preventDefault();
+          flip(index);
+        });
+        board.appendChild(btn);
+      });
+    }
+
+    function paint(card) {
+      card.el.classList.toggle("flipped", card.open || card.matched);
+      card.el.classList.toggle("matched", card.matched);
+    }
+
+    function flip(index) {
+      const card = cards[index];
+      if (lock || card.open || card.matched) return;
+      card.open = true;
+      paint(card);
+
+      if (!first) {
+        first = card;
+        return;
+      }
+
+      moves++;
+      totalMoves++;
+      movesEl.textContent = "الحركات: " + moves;
+      lock = true;
+
+      if (first.key === card.key) {
+        first.matched = true;
+        card.matched = true;
+        pairs++;
+        pairsEl.textContent = "الأزواج: " + pairs + " / " + LEVELS[level].pairs;
+        paint(first);
+        paint(card);
+        first = null;
+        lock = false;
+        if (pairs === LEVELS[level].pairs) finishLevel();
+      } else {
+        const a = first, b = card;
+        setTimeout(function () {
+          a.open = false;
+          b.open = false;
+          paint(a);
+          paint(b);
+          first = null;
+          lock = false;
+        }, 750);
+      }
+    }
+
+    function finishLevel() {
+      if (level >= 9) {
+        document.getElementById("winMsg").textContent =
+          "خلّصت 10 مستويات · مجموع الحركات: " + totalMoves;
+        winScreen.classList.remove("hidden");
+        return;
+      }
+      document.getElementById("levelTitle").textContent = "🎉 برافو! المستوى " + (level + 1);
+      document.getElementById("levelMsg").textContent =
+        "خلّصت " + LEVELS[level].pairs + " أزواج في " + moves + " حركة — يلا المستوى " + (level + 2) + "!";
+      document.getElementById("nextBtn").textContent = "المستوى " + (level + 2) + " ←";
+      levelScreen.classList.remove("hidden");
+    }
+
+    document.getElementById("startBtn").addEventListener("click", startFromBeginning);
+    document.getElementById("againBtn").addEventListener("click", startFromBeginning);
+    document.getElementById("nextBtn").addEventListener("click", function () {
+      levelScreen.classList.add("hidden");
+      level++;
+      startLevel();
+    });
+  </script>
+</body>
+</html>

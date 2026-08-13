@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>عرض قصّ ولزّق — صفحتي</title>
+  <style>
+    :root {
+      --sky: #1e6bb8;
+      --sky-deep: #0f3d6b;
+      --sun: #f0c84a;
+      --sun-hot: #e8a317;
+      --mint: #1f9d6a;
+      --cloud: #f4f9ff;
+      --ink: #1a2a3a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, #b8e0ff 0%, transparent 55%),
+        radial-gradient(ellipse 70% 45% at 100% 100%, #ffe9a8 0%, transparent 50%),
+        linear-gradient(160deg, #e8f4ff 0%, #fff8e8 55%, #e8fff4 100%);
+    }
+
+    /* —— شريط المعلم —— */
+    .bar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(15, 61, 107, 0.96);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      padding: 10px 16px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      align-items: center; justify-content: space-between;
+    }
+    .bar h1 { margin: 0; font-size: 1.05rem; font-weight: 900; }
+    .bar .note {
+      font-weight: 800; font-size: 0.82rem;
+      background: var(--sun); color: var(--sky-deep);
+      padding: 5px 12px; border-radius: 999px;
+    }
+    .days, .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .days button, .actions button {
+      font: inherit; font-weight: 900; border: none; border-radius: 10px;
+      padding: 8px 14px; cursor: pointer;
+    }
+    .days button { background: #fff; color: var(--sky-deep); }
+    .days button.active { background: var(--sky); color: #fff; }
+    .days button[data-day="2"].active { background: var(--mint); }
+    .days button[data-day="3"].active { background: #c45c16; }
+    .actions button { background: var(--sun); color: var(--sky-deep); }
+    .actions button.secondary { background: #fff; color: var(--sky); }
+
+    .mission {
+      background: var(--sky); color: #fff; font-weight: 800;
+      padding: 9px 16px; display: flex; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap; font-size: 0.95rem;
+    }
+    .mission.done { background: var(--mint); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) 1fr;
+      gap: 16px;
+      padding: 16px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; }
+    }
+
+    .tray-panel {
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      padding: 14px;
+      border: 2px solid rgba(30,107,184,0.15);
+      box-shadow: 0 8px 24px rgba(15,61,107,0.06);
+      align-self: start;
+      position: sticky; top: 72px;
+      max-height: calc(100vh - 90px);
+      overflow: auto;
+    }
+    .tray-panel h2 {
+      margin: 0 0 4px; font-size: 1rem; color: var(--sky);
+    }
+    .tray-panel .hint {
+      margin: 0 0 12px; font-size: 0.8rem; font-weight: 700; color: #64748b;
+    }
+
+    .tray {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    /* قطع الصينية — شكل الصفحة الحقيقي مصغّر */
+    .piece {
+      cursor: grab; user-select: none;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.2s;
+    }
+    .piece:hover { transform: translateY(-2px); }
+    .piece.selected {
+      outline: 3px solid var(--sun);
+      outline-offset: 3px;
+      box-shadow: 0 8px 20px rgba(240,200,74,0.45);
+    }
+    .piece.used { opacity: 0.28; pointer-events: none; filter: grayscale(0.4); }
+
+    .piece .badge-tag {
+      display: none; position: absolute; top: 4px; left: 4px; z-index: 2;
+      font-family: Consolas, monospace; direction: ltr;
+      background: #14532d; color: #4ade80; font-size: 0.65rem; font-weight: 900;
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .piece .badge-styles {
+      display: none; position: absolute; bottom: 4px; right: 4px; left: 4px;
+      flex-wrap: wrap; gap: 3px; justify-content: center; z-index: 2;
+    }
+    .piece .chip {
+      background: #ffedd5; border: 1px solid #c45c16; color: #9a3412;
+      font-size: 0.58rem; font-weight: 900; padding: 1px 5px; border-radius: 3px;
+    }
+    body.day-2 .badge-tag, body.day-3 .badge-tag { display: inline-block; }
+    body.day-3 .badge-styles { display: flex; }
+
+    .piece-hero-bg {
+      height: 52px; border-radius: 14px;
+      background: linear-gradient(145deg, var(--sky), var(--sky-deep));
+      box-shadow: 0 4px 12px rgba(15,61,107,0.2);
+    }
+    .piece-avatar {
+      width: 56px; height: 56px; border-radius: 50%; margin: 0 auto;
+      background: var(--sun); display: grid; place-items: center;
+      font-size: 1.6rem; border: 3px solid #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .piece-name {
+      text-align: center; font-size: 1.15rem; font-weight: 900;
+      color: #fff; background: linear-gradient(145deg, var(--sky), var(--sky-deep));
+      padding: 10px; border-radius: 12px;
+    }
+    .piece-tagline {
+      text-align: center; font-size: 0.85rem; font-weight: 700;
+      color: #fff; background: rgba(15,61,107,0.85);
+      padding: 8px; border-radius: 10px;
+    }
+    .piece-card {
+      background: #fff; border-radius: 14px; height: 48px;
+      border: 2px solid rgba(30,107,184,0.12);
+      box-shadow: 0 4px 12px rgba(15,61,107,0.06);
+    }
+    .piece-h2 {
+      color: var(--sky); font-weight: 900; font-size: 1rem;
+      background: #fff; padding: 8px 12px; border-radius: 10px;
+      border: 2px solid rgba(30,107,184,0.12);
+    }
+    .piece-p {
+      font-weight: 700; font-size: 0.78rem; line-height: 1.4;
+      background: #fff; padding: 8px 10px; border-radius: 10px;
+      border: 2px solid rgba(30,107,184,0.1); color: #334155;
+    }
+    .piece-hobby-frame {
+      background: var(--cloud); border: 2px solid #c5e0f5;
+      border-radius: 12px; height: 56px;
+    }
+    .piece-hobby-icon {
+      width: 40px; height: 40px; margin: 0 auto;
+      background: #fff; border-radius: 10px; display: grid; place-items: center;
+      font-size: 1.3rem; border: 2px solid #c5e0f5;
+    }
+    .piece-hobby-title {
+      text-align: center; font-weight: 900; font-size: 0.85rem;
+      color: var(--sky-deep); background: var(--cloud);
+      padding: 6px 10px; border-radius: 8px; border: 2px solid #c5e0f5;
+    }
+    .piece-verse-bg {
+      height: 44px; border-radius: 14px;
+      background: linear-gradient(135deg, #fff8e0, #ffe9a8);
+      border: 2px solid var(--sun-hot);
+    }
+    .piece-btn {
+      display: block; width: 100%; text-align: center;
+      font-weight: 900; font-size: 0.95rem; padding: 12px;
+      border: none; border-radius: 14px;
+      background: linear-gradient(180deg, var(--sun), var(--sun-hot));
+      color: var(--sky-deep); box-shadow: 0 4px 0 #c48a0e;
+      cursor: grab;
+    }
+
+    .board-panel {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .board-label {
+      font-weight: 900; color: var(--sky); margin-bottom: 10px; font-size: 0.95rem;
+    }
+
+    /* —— الصفحة = صفحتي —— */
+    .page {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .slot {
+      position: relative;
+      cursor: pointer;
+      transition: box-shadow 0.15s, outline 0.15s;
+    }
+    .slot.over {
+      outline: 3px solid var(--sun);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 6px rgba(240,200,74,0.25);
+    }
+    .slot.wrong { animation: shake 0.3s; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 30%{transform:translateX(-4px)} 70%{transform:translateX(4px)}
+    }
+
+    /* Ghost placeholders */
+    .ghost {
+      border: 2px dashed rgba(30,107,184,0.35);
+      background: rgba(255,255,255,0.35);
+      color: rgba(30,107,184,0.45);
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, var(--sky) 0%, var(--sky-deep) 100%);
+      color: #fff;
+      border-radius: 28px;
+      padding: 28px 24px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 61, 107, 0.25);
+      min-height: 200px;
+    }
+    .hero.ghost-frame {
+      background: linear-gradient(145deg, rgba(30,107,184,0.25), rgba(15,61,107,0.2));
+      box-shadow: none;
+      border: 2px dashed rgba(30,107,184,0.4);
+    }
+    .hero.ghost-frame::before,
+    .hero.ghost-frame::after { display: none; }
+    .hero:not(.ghost-frame)::before {
+      content: "";
+      position: absolute; width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(240, 200, 74, 0.25); top: -60px; left: -40px;
+    }
+    .hero:not(.ghost-frame)::after {
+      content: "";
+      position: absolute; width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1); bottom: -30px; right: -20px;
+    }
+    .hero .ghost-label {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem; color: rgba(255,255,255,0.7); z-index: 0;
+      pointer-events: none;
+    }
+    .hero.filled .ghost-label { display: none; }
+
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-inner[hidden] { display: none !important; }
+
+    .slot-avatar.ghost {
+      width: 96px; height: 96px; border-radius: 50%; margin: 0 auto 16px;
+      border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7); font-size: 0.75rem;
+    }
+    .slot-avatar.filled {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: var(--sun); display: grid; place-items: center;
+      font-size: 3rem; margin: 0 auto 16px; border: 5px solid #fff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .slot-name.ghost {
+      height: 2.4rem; border-radius: 12px; margin: 0 auto 8px; max-width: 240px;
+      border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.7);
+    }
+    .slot-name.filled {
+      margin: 0 0 8px; font-size: clamp(1.8rem, 6vw, 2.4rem); font-weight: 900;
+      color: #fff; border: none; background: transparent;
+    }
+
+    .slot-tagline.ghost {
+      height: 1.6rem; border-radius: 10px; margin: 0 auto; max-width: 260px;
+      border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.65); font-size: 0.8rem;
+    }
+    .slot-tagline.filled {
+      margin: 0; font-size: 1.15rem; font-weight: 600; opacity: 0.95;
+      color: #fff; border: none; background: transparent;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 24px 22px;
+      margin-top: 18px;
+      box-shadow: 0 8px 24px rgba(15, 61, 107, 0.08);
+      border: 3px solid rgba(30, 107, 184, 0.12);
+      min-height: 88px;
+      position: relative;
+    }
+    .card.ghost-frame {
+      background: rgba(255,255,255,0.45);
+      border-style: dashed;
+      box-shadow: none;
+    }
+    .card .ghost-label {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; color: rgba(30,107,184,0.4); pointer-events: none;
+    }
+    .card.filled .ghost-label { display: none; }
+
+    .card-inner[hidden] { display: none !important; }
+
+    .slot-h2.ghost {
+      height: 2rem; border-radius: 10px; margin-bottom: 12px; max-width: 140px;
+      font-size: 0.8rem;
+    }
+    .slot-h2.filled {
+      margin: 0 0 12px; font-size: 1.25rem; font-weight: 900; color: var(--sky);
+      border: none; background: transparent; display: block; text-align: right;
+      justify-content: flex-start;
+    }
+
+    .slot-text.ghost {
+      height: 3.2rem; border-radius: 10px; font-size: 0.8rem; width: 100%;
+    }
+    .slot-text.filled {
+      margin: 0; font-size: 1.1rem; line-height: 1.7; font-weight: 600;
+      border: none; background: transparent; color: var(--ink);
+      display: block; text-align: right; justify-content: flex-start;
+    }
+
+    .hobbies {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .hobby {
+      background: var(--cloud);
+      border: 2px solid #c5e0f5;
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align: center;
+      min-height: 88px;
+      position: relative;
+    }
+    .hobby.ghost-frame {
+      background: rgba(244,249,255,0.5);
+      border-style: dashed;
+    }
+    .hobby .ghost-label {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.75rem; color: rgba(30,107,184,0.4); pointer-events: none;
+    }
+    .hobby.filled .ghost-label { display: none; }
+    .hobby-inner[hidden] { display: none !important; }
+
+    .slot-h-icon.ghost {
+      width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 6px; font-size: 0.7rem;
+    }
+    .slot-h-icon.filled {
+      font-size: 1.7rem; margin: 0 auto 6px; border: none; background: transparent;
+      width: auto; height: auto; display: block;
+    }
+
+    .slot-h-title.ghost {
+      height: 1.4rem; border-radius: 8px; font-size: 0.7rem; width: 90%; margin: 0 auto;
+    }
+    .slot-h-title.filled {
+      margin: 0; font-weight: 900; font-size: 1rem; color: var(--sky-deep);
+      border: none; background: transparent; display: block;
+    }
+
+    .verse {
+      background: linear-gradient(135deg, #fff8e0, #ffe9a8);
+      border: 3px solid var(--sun-hot);
+      border-radius: 22px;
+      padding: 22px;
+      margin-top: 18px;
+      text-align: center;
+      position: relative;
+      min-height: 100px;
+    }
+    .verse.ghost-frame {
+      background: rgba(255,248,224,0.4);
+      border-style: dashed;
+    }
+    .verse .ghost-label {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; color: rgba(138,106,16,0.45); pointer-events: none;
+    }
+    .verse.filled .ghost-label { display: none; }
+    .verse-inner[hidden] { display: none !important; }
+
+    .slot-quote.ghost {
+      height: 3rem; border-radius: 10px; margin-bottom: 10px; font-size: 0.8rem;
+    }
+    .slot-quote.filled {
+      margin: 0 0 10px; font-size: 1.15rem; font-weight: 800; line-height: 1.6;
+      color: var(--sky-deep); border: none; background: transparent; display: block;
+    }
+
+    .slot-cite.ghost {
+      height: 1.4rem; border-radius: 8px; max-width: 120px; margin: 0 auto; font-size: 0.75rem;
+    }
+    .slot-cite.filled {
+      margin: 0; font-style: normal; font-weight: 700; color: #8a6a10; font-size: 0.95rem;
+      border: none; background: transparent; display: block;
+    }
+
+    .actions-area {
+      text-align: center;
+      margin-top: 28px;
+    }
+    .slot-btn.ghost {
+      display: inline-flex; min-width: 180px; height: 56px; border-radius: 18px;
+      margin: 0 auto; font-size: 0.9rem;
+    }
+    .slot-btn.filled {
+      display: inline-block; font-size: 1.25rem; font-weight: 900;
+      padding: 16px 36px; border: none; border-radius: 18px;
+      background: linear-gradient(180deg, var(--sun) 0%, var(--sun-hot) 100%);
+      color: var(--sky-deep); box-shadow: 0 6px 0 #c48a0e;
+      cursor: default;
+    }
+
+    .footer {
+      text-align: center; margin-top: 28px;
+      font-size: 0.85rem; font-weight: 700; color: #5a7a94;
+    }
+    .footer strong { color: var(--sky); }
+
+    /* تاجات على القطع الموضوعة (يوم 2–3) */
+    .slot .live-tag {
+      display: none; position: absolute; top: 4px; left: 4px; z-index: 3;
+      font-family: Consolas, monospace; direction: ltr;
+      background: #14532d; color: #4ade80; font-size: 0.6rem; font-weight: 900;
+      padding: 2px 5px; border-radius: 3px;
+    }
+    .slot .live-styles {
+      display: none; position: absolute; bottom: 4px; right: 4px; left: 4px;
+      flex-wrap: wrap; gap: 2px; justify-content: center; z-index: 3;
+    }
+    .slot .live-styles .chip {
+      background: #ffedd5; border: 1px solid #c45c16; color: #9a3412;
+      font-size: 0.55rem; font-weight: 900; padding: 1px 4px; border-radius: 2px;
+    }
+    body.day-2 .slot.filled .live-tag,
+    body.day-3 .slot.filled .live-tag { display: inline-block; }
+    body.day-3 .slot.filled .live-styles { display: flex; }
+
+    .toast {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      background: var(--sky-deep); color: #fff; font-weight: 900;
+      padding: 12px 20px; border-radius: 14px; display: none; z-index: 60;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { display: block; }
+    .toast.ok { background: var(--mint); }
+    .toast.bad { background: #b91c1c; }
+  </style>
+</head>
+<body class="day-1">
+  <div class="bar">
+    <h1>عرض قصّ ولزّق — نفس صفحتي</h1>
+    <span class="note">النتيجة = الصفحة النهائية</span>
+    <div class="days">
+      <button type="button" class="active" data-day="1">اليوم 1 · شكل</button>
+      <button type="button" data-day="2">اليوم 2 · تاجات</button>
+      <button type="button" data-day="3">اليوم 3 · ستاييل</button>
+    </div>
+    <div class="actions">
+      <button type="button" id="solveBtn">حلّ قدامهم</button>
+      <button type="button" class="secondary" id="resetBtn">من جديد</button>
+    </div>
+  </div>
+
+  <div class="mission" id="mission">
+    <div id="missionText">اختَر قطعة من اليسار ← حطها في مكانها على الصفحة</div>
+    <div id="progress">0 من 0</div>
+  </div>
+
+  <div class="workspace">
+    <aside class="tray-panel">
+      <h2>القطع</h2>
+      <p class="hint">نفس أجزاء الصفحة — دوس عليها بعدين دوس على مكانها</p>
+      <div class="tray" id="tray"></div>
+    </aside>
+
+    <main class="board-panel">
+      <div class="board-label">صفحتي — زي ما هتطلع بعد اللزق</div>
+      <div class="page" id="page">
+
+        <!-- رأس -->
+        <header class="hero ghost-frame slot" data-accept="hero" id="slot-hero">
+          <span class="ghost-label">خلفية الرأس</span>
+          <div class="hero-inner" id="hero-inner" hidden>
+            <div class="slot slot-avatar ghost" data-accept="avatar" id="slot-avatar">صورة</div>
+            <div class="slot slot-name ghost" data-accept="name" id="slot-name">الاسم</div>
+            <div class="slot slot-tagline ghost" data-accept="tagline" id="slot-tagline">الجملة</div>
+          </div>
+        </header>
+
+        <!-- عني -->
+        <section class="card ghost-frame slot" data-accept="about" id="slot-about">
+          <span class="ghost-label">قسم عني</span>
+          <div class="card-inner" id="about-inner" hidden>
+            <div class="slot slot-h2 ghost" data-accept="about-title" id="slot-about-title">عنوان</div>
+            <div class="slot slot-text ghost" data-accept="about-text" id="slot-about-text">النص</div>
+          </div>
+        </section>
+
+        <!-- بحب -->
+        <section class="card ghost-frame slot" data-accept="love" id="slot-love">
+          <span class="ghost-label">قسم بحب</span>
+          <div class="card-inner" id="love-inner" hidden>
+            <div class="slot slot-h2 ghost" data-accept="love-title" id="slot-love-title">عنوان</div>
+            <div class="hobbies">
+              <div class="hobby ghost-frame slot" data-accept="h1" id="slot-h1">
+                <span class="ghost-label">هواية 1</span>
+                <div class="hobby-inner" id="h1-inner" hidden>
+                  <div class="slot slot-h-icon ghost" data-accept="h1-img" id="slot-h1-img">⚽</div>
+                  <div class="slot slot-h-title ghost" data-accept="h1-title" id="slot-h1-title">عنوان</div>
+                </div>
+              </div>
+              <div class="hobby ghost-frame slot" data-accept="h2" id="slot-h2">
+                <span class="ghost-label">هواية 2</span>
+                <div class="hobby-inner" id="h2-inner" hidden>
+                  <div class="slot slot-h-icon ghost" data-accept="h2-img" id="slot-h2-img">🎨</div>
+                  <div class="slot slot-h-title ghost" data-accept="h2-title" id="slot-h2-title">عنوان</div>
+                </div>
+              </div>
+              <div class="hobby ghost-frame slot" data-accept="h3" id="slot-h3">
+                <span class="ghost-label">هواية 3</span>
+                <div class="hobby-inner" id="h3-inner" hidden>
+                  <div class="slot slot-h-icon ghost" data-accept="h3-img" id="slot-h3-img">🎮</div>
+                  <div class="slot slot-h-title ghost" data-accept="h3-title" id="slot-h3-title">عنوان</div>
+                </div>
+              </div>
+              <div class="hobby ghost-frame slot" data-accept="h4" id="slot-h4">
+                <span class="ghost-label">هواية 4</span>
+                <div class="hobby-inner" id="h4-inner" hidden>
+                  <div class="slot slot-h-icon ghost" data-accept="h4-img" id="slot-h4-img">📖</div>
+                  <div class="slot slot-h-title ghost" data-accept="h4-title" id="slot-h4-title">عنوان</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- حلمي -->
+        <section class="card ghost-frame slot" data-accept="dream" id="slot-dream">
+          <span class="ghost-label">قسم حلمي</span>
+          <div class="card-inner" id="dream-inner" hidden>
+            <div class="slot slot-h2 ghost" data-accept="dream-title" id="slot-dream-title">عنوان</div>
+            <div class="slot slot-text ghost" data-accept="dream-text" id="slot-dream-text">النص</div>
+          </div>
+        </section>
+
+        <!-- آية -->
+        <section class="verse ghost-frame slot" data-accept="verse" id="slot-verse">
+          <span class="ghost-label">مربع الآية</span>
+          <div class="verse-inner" id="verse-inner" hidden>
+            <div class="slot slot-quote ghost" data-accept="verse-text" id="slot-verse-text">نص الآية</div>
+            <div class="slot slot-cite ghost" data-accept="verse-ref" id="slot-verse-ref">المرجع</div>
+          </div>
+        </section>
+
+        <!-- زر -->
+        <div class="actions-area">
+          <div class="slot slot-btn ghost" data-accept="button" id="slot-button">الزر</div>
+        </div>
+
+        <p class="footer">صُنعت في كورس <strong>أنا أصنع صفحتي</strong> — HTML + CSS + AI</p>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const PIECES = [
+      { id: "hero", tray: "hero-bg", label: "خلفية الرأس", tag: "<header>", styles: ["تدرج أزرق", "زوايا"], unlock: "hero-inner", frame: true },
+      { id: "avatar", tray: "avatar", text: "👦", label: "الصورة", tag: "<img>", styles: ["دائري", "أصفر"] },
+      { id: "name", tray: "name", text: "أنا أندرو!", label: "الاسم", tag: "<h1>", styles: ["خط كبير", "أبيض"] },
+      { id: "tagline", tray: "tagline", text: "صانع صفحات ويب 🌐", label: "الجملة", tag: "<p>", styles: ["خط أصغر"] },
+      { id: "about", tray: "card", label: "قسم عني", tag: "<section>", styles: ["خلفية بيضا", "ظل"], unlock: "about-inner", frame: true },
+      { id: "about-title", tray: "h2", text: "👋 عني", label: "عنوان عني", tag: "<h2>", styles: ["لون أزرق"] },
+      { id: "about-text", tray: "p", text: "عندي 9 سنين، بحب أتعلم حاجات جديدة، وأحب أعمل صفحات حلوة على الكمبيوتر!", label: "نص عني", tag: "<p>", styles: ["خط واضح"] },
+      { id: "love", tray: "card", label: "قسم بحب", tag: "<section>", styles: ["خلفية بيضا", "ظل"], unlock: "love-inner", frame: true },
+      { id: "love-title", tray: "h2", text: "❤️ بحب", label: "عنوان بحب", tag: "<h2>", styles: ["لون أزرق"] },
+      { id: "h1", tray: "hobby-frame", label: "إطار هواية 1", tag: "<div>", styles: ["خلفية فاتحة"], unlock: "h1-inner", frame: true },
+      { id: "h1-img", tray: "hobby-icon", text: "⚽", label: "أيقونة 1", tag: "<span>", styles: [] },
+      { id: "h1-title", tray: "hobby-title", text: "كرة القدم", label: "عنوان 1", tag: "<p>", styles: ["سميك"] },
+      { id: "h2", tray: "hobby-frame", label: "إطار هواية 2", tag: "<div>", styles: ["خلفية فاتحة"], unlock: "h2-inner", frame: true },
+      { id: "h2-img", tray: "hobby-icon", text: "🎨", label: "أيقونة 2", tag: "<span>", styles: [] },
+      { id: "h2-title", tray: "hobby-title", text: "الرسم", label: "عنوان 2", tag: "<p>", styles: ["سميك"] },
+      { id: "h3", tray: "hobby-frame", label: "إطار هواية 3", tag: "<div>", styles: ["خلفية فاتحة"], unlock: "h3-inner", frame: true },
+      { id: "h3-img", tray: "hobby-icon", text: "🎮", label: "أيقونة 3", tag: "<span>", styles: [] },
+      { id: "h3-title", tray: "hobby-title", text: "الألعاب", label: "عنوان 3", tag: "<p>", styles: ["سميك"] },
+      { id: "h4", tray: "hobby-frame", label: "إطار هواية 4", tag: "<div>", styles: ["خلفية فاتحة"], unlock: "h4-inner", frame: true },
+      { id: "h4-img", tray: "hobby-icon", text: "📖", label: "أيقونة 4", tag: "<span>", styles: [] },
+      { id: "h4-title", tray: "hobby-title", text: "القصص", label: "عنوان 4", tag: "<p>", styles: ["سميك"] },
+      { id: "dream", tray: "card", label: "قسم حلمي", tag: "<section>", styles: ["خلفية بيضا", "ظل"], unlock: "dream-inner", frame: true },
+      { id: "dream-title", tray: "h2", text: "🎯 حلمي", label: "عنوان حلمي", tag: "<h2>", styles: ["لون أزرق"] },
+      { id: "dream-text", tray: "p", text: "أعمل لعبة ويب زي «ضد التيار» لأصحابي في الكنيسة!", label: "نص حلمي", tag: "<p>", styles: ["خط واضح"] },
+      { id: "verse", tray: "verse-bg", label: "مربع الآية", tag: "<section>", styles: ["خلفية صفرا", "حدود"], unlock: "verse-inner", frame: true },
+      { id: "verse-text", tray: "p", text: "«تمسّك بما عندك لئلا يأخذ أحد إكليلك»", label: "نص الآية", tag: "<blockquote>", styles: ["سميك"] },
+      { id: "verse-ref", tray: "hobby-title", text: "رؤيا 3: 11", label: "المرجع", tag: "<cite>", styles: [] },
+      { id: "button", tray: "btn", text: "قل مرحبًا 👋", label: "الزر", tag: "<button>", styles: ["أصفر", "ظل"] }
+    ];
+
+    const ORDER = PIECES.map((p) => p.id);
+    const DAY_TEXT = {
+      1: "اليوم 1: ركّب شكل الصفحة — نفس النتيجة النهائية",
+      2: "اليوم 2: نفس الصفحة + أسماء التاجات",
+      3: "اليوم 3: نفس الصفحة + الستاييل"
+    };
+
+    let day = 1;
+    let selected = null;
+    const placed = {};
+
+    const tray = document.getElementById("tray");
+    const toast = document.getElementById("toast");
+    const progress = document.getElementById("progress");
+    const missionText = document.getElementById("missionText");
+    const mission = document.getElementById("mission");
+
+    function piece(id) { return PIECES.find((p) => p.id === id); }
+
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = "toast show " + (type || "");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    function trayClass(tray) {
+      return ({
+        "hero-bg": "piece-hero-bg",
+        avatar: "piece-avatar",
+        name: "piece-name",
+        tagline: "piece-tagline",
+        card: "piece-card",
+        h2: "piece-h2",
+        p: "piece-p",
+        "hobby-frame": "piece-hobby-frame",
+        "hobby-icon": "piece-hobby-icon",
+        "hobby-title": "piece-hobby-title",
+        "verse-bg": "piece-verse-bg",
+        btn: "piece-btn"
+      })[tray] || "";
+    }
+
+    function attachMeta(el, p) {
+      const tag = document.createElement("span");
+      tag.className = "badge-tag";
+      tag.textContent = p.tag;
+      el.appendChild(tag);
+      const styles = document.createElement("div");
+      styles.className = "badge-styles";
+      (p.styles || []).forEach((s) => {
+        const c = document.createElement("span");
+        c.className = "chip";
+        c.textContent = s;
+        styles.appendChild(c);
+      });
+      el.appendChild(styles);
+    }
+
+    function attachLiveMeta(slot, p) {
+      slot.querySelectorAll(".live-tag, .live-styles").forEach((n) => n.remove());
+      const tag = document.createElement("span");
+      tag.className = "live-tag";
+      tag.textContent = p.tag;
+      slot.appendChild(tag);
+      const styles = document.createElement("div");
+      styles.className = "live-styles";
+      (p.styles || []).forEach((s) => {
+        const c = document.createElement("span");
+        c.className = "chip";
+        c.textContent = s;
+        styles.appendChild(c);
+      });
+      slot.appendChild(styles);
+    }
+
+    function fillContent(slot, p) {
+      slot.classList.remove("ghost");
+      slot.classList.add("filled");
+      slot.textContent = p.text || "";
+      attachLiveMeta(slot, p);
+    }
+
+    function fillFrame(slot, p) {
+      slot.classList.remove("ghost-frame");
+      slot.classList.add("filled");
+      attachLiveMeta(slot, p);
+    }
+
+    function place(id) {
+      const p = piece(id);
+      const slot = document.getElementById("slot-" + id);
+      if (!slot) return false;
+      if (placed[id]) return true;
+
+      // locked if parent frame not placed
+      const parentMap = {
+        avatar: "hero", name: "hero", tagline: "hero",
+        "about-title": "about", "about-text": "about",
+        "love-title": "love",
+        h1: "love", h2: "love", h3: "love", h4: "love",
+        "h1-img": "h1", "h1-title": "h1",
+        "h2-img": "h2", "h2-title": "h2",
+        "h3-img": "h3", "h3-title": "h3",
+        "h4-img": "h4", "h4-title": "h4",
+        "dream-title": "dream", "dream-text": "dream",
+        "verse-text": "verse", "verse-ref": "verse"
+      };
+      if (parentMap[id] && !placed[parentMap[id]]) {
+        showToast("حط الإطار الأول، بعدين اللي جواه", "bad");
+        return false;
+      }
+
+      if (slot.dataset.accept !== id) {
+        slot.classList.add("wrong");
+        setTimeout(() => slot.classList.remove("wrong"), 300);
+        showToast("المكان ده مش للقطعة دي", "bad");
+        return false;
+      }
+
+      placed[id] = true;
+
+      if (p.unlock) {
+        const u = document.getElementById(p.unlock);
+        if (u) u.hidden = false;
+      }
+
+      if (p.frame) fillFrame(slot, p);
+      else fillContent(slot, p);
+
+      selected = null;
+      renderTray();
+      updateProgress();
+      showToast("✓ تمام — زي الصفحة", "ok");
+      return true;
+    }
+
+    function placeSelected(acceptId) {
+      if (!selected) {
+        showToast("اختَر قطعة من اليسار أولًا", "");
+        return;
+      }
+      if (selected !== acceptId) {
+        const slot = document.getElementById("slot-" + acceptId);
+        if (slot) {
+          slot.classList.add("wrong");
+          setTimeout(() => slot.classList.remove("wrong"), 300);
+        }
+        showToast("المكان ده مش للقطعة دي", "bad");
+        return;
+      }
+      place(selected);
+    }
+
+    function renderTray() {
+      tray.innerHTML = "";
+      PIECES.forEach((p) => {
+        const el = document.createElement("div");
+        el.className = "piece " + trayClass(p.tray);
+        el.dataset.piece = p.id;
+        el.draggable = true;
+        el.title = p.label;
+        if (placed[p.id]) el.classList.add("used");
+        if (selected === p.id) el.classList.add("selected");
+        if (p.text && p.tray !== "hero-bg" && p.tray !== "card" && p.tray !== "hobby-frame" && p.tray !== "verse-bg") {
+          el.appendChild(document.createTextNode(p.text));
+        }
+        attachMeta(el, p);
+
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (placed[p.id]) return;
+          selected = selected === p.id ? null : p.id;
+          renderTray();
+          if (selected) showToast("دلوقتي دوس على مكانها في الصفحة", "");
+        });
+        el.addEventListener("dragstart", (e) => {
+          if (placed[p.id]) { e.preventDefault(); return; }
+          e.dataTransfer.setData("text/plain", p.id);
+          selected = p.id;
+        });
+
+        tray.appendChild(el);
+      });
+    }
+
+    function wireSlots() {
+      document.querySelectorAll(".slot[data-accept]").forEach((slot) => {
+        slot.addEventListener("click", (e) => {
+          e.stopPropagation();
+          placeSelected(slot.dataset.accept);
+        });
+        slot.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          slot.classList.add("over");
+        });
+        slot.addEventListener("dragleave", () => slot.classList.remove("over"));
+        slot.addEventListener("drop", (e) => {
+          e.preventDefault();
+          slot.classList.remove("over");
+          selected = e.dataTransfer.getData("text/plain");
+          placeSelected(slot.dataset.accept);
+        });
+      });
+    }
+
+    function updateProgress() {
+      const n = Object.keys(placed).length;
+      progress.textContent = n + " من " + PIECES.length;
+      missionText.textContent = DAY_TEXT[day];
+      mission.classList.toggle("done", n === PIECES.length);
+    }
+
+    function resetSlotVisual(id) {
+      const slot = document.getElementById("slot-" + id);
+      const p = piece(id);
+      if (!slot || !p) return;
+
+      slot.querySelectorAll(".live-tag, .live-styles").forEach((n) => n.remove());
+
+      if (p.frame) {
+        slot.classList.add("ghost-frame");
+        slot.classList.remove("filled");
+        return;
+      }
+
+      const labels = {
+        avatar: "صورة",
+        name: "الاسم",
+        tagline: "الجملة",
+        "about-title": "عنوان",
+        "about-text": "النص",
+        "love-title": "عنوان",
+        "h1-img": "⚽", "h1-title": "عنوان",
+        "h2-img": "🎨", "h2-title": "عنوان",
+        "h3-img": "🎮", "h3-title": "عنوان",
+        "h4-img": "📖", "h4-title": "عنوان",
+        "dream-title": "عنوان",
+        "dream-text": "النص",
+        "verse-text": "نص الآية",
+        "verse-ref": "المرجع",
+        button: "الزر"
+      };
+
+      slot.classList.add("ghost");
+      slot.classList.remove("filled");
+      slot.textContent = labels[id] || "…";
+    }
+
+    function resetAll() {
+      Object.keys(placed).forEach((k) => delete placed[k]);
+      selected = null;
+
+      ["hero-inner", "about-inner", "love-inner", "h1-inner", "h2-inner", "h3-inner", "h4-inner", "dream-inner", "verse-inner"]
+        .forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.hidden = true;
+        });
+
+      ORDER.forEach(resetSlotVisual);
+      renderTray();
+      updateProgress();
+      showToast("ابدأ بخلفية الرأس", "");
+    }
+
+    function solveAll() {
+      resetAll();
+      ORDER.forEach((id) => place(id));
+      showToast("كده صفحتي كاملة — نفس النتيجة النهائية", "ok");
+    }
+
+    document.querySelectorAll(".days button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        day = +btn.dataset.day;
+        document.body.className = "day-" + day;
+        document.querySelectorAll(".days button").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const snap = { ...placed };
+        resetAll();
+        ORDER.filter((id) => snap[id]).forEach((id) => place(id));
+        updateProgress();
+      });
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", resetAll);
+    document.getElementById("solveBtn").addEventListener("click", solveAll);
+
+    wireSlots();
+    resetAll();
+  </script>
+</body>
+</html>

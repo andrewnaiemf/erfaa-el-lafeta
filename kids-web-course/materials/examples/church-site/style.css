@@ -1,0 +1,195 @@
+:root {
+  --navy: #1a3a5c;
+  --navy-deep: #0f2840;
+  --gold: #d4a843;
+  --gold-light: #f0d78c;
+  --white: #fafafa;
+  --text: #2a3a4a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  color: var(--text);
+  background: var(--white);
+  line-height: 1.6;
+}
+
+.top-bar {
+  background: var(--navy-deep);
+  color: var(--gold-light);
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+header.site-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color: #fff;
+  padding: 20px 16px 24px;
+  text-align: center;
+}
+
+header.site-header .angel { font-size: 2rem; margin-bottom: 4px; }
+
+header.site-header h1 {
+  margin: 0 0 6px;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  color: var(--gold-light);
+}
+
+header.site-header p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+nav.main-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--navy);
+}
+
+nav.main-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: background 0.15s;
+}
+
+nav.main-nav a:hover,
+nav.main-nav a.active {
+  background: var(--gold);
+  color: var(--navy-deep);
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 16px 48px;
+}
+
+main h2 {
+  color: var(--navy);
+  font-size: 1.4rem;
+  margin: 0 0 16px;
+}
+
+.intro {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.cards {
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border: 2px solid #e0e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(26, 58, 92, 0.08);
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 1.15rem;
+}
+
+.card p { margin: 0; font-weight: 600; }
+
+.activity-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.activity-card {
+  background: linear-gradient(135deg, #fff 0%, #f5f8fc 100%);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.activity-card h3 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 1.1rem;
+}
+
+.contact-box {
+  background: #f5f8fc;
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px solid #e0e8f0;
+}
+
+.contact-box p { margin: 0 0 12px; font-weight: 600; }
+
+form.simple-form label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--navy);
+}
+
+form.simple-form input,
+form.simple-form textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 12px;
+  border: 2px solid #c5d5e5;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+form.simple-form button {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  background: var(--gold);
+  color: var(--navy-deep);
+  cursor: pointer;
+}
+
+form.simple-form button:hover { filter: brightness(1.08); }
+
+#thanks {
+  display: none;
+  background: #d4f5e4;
+  color: #157a52;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  margin-top: 12px;
+}
+
+footer.site-footer {
+  background: var(--navy-deep);
+  color: var(--gold-light);
+  text-align: center;
+  padding: 20px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@media (min-width: 600px) {
+  .cards, .activity-grid { grid-template-columns: 1fr 1fr; }
+  .activity-grid { grid-template-columns: 1fr 1fr; }
+}

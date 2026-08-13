@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>الدودة والسكر 🐍</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: #14352a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+      touch-action: none;
+    }
+    .hud {
+      width: min(420px, 96vw);
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 8px 8px;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+    #board {
+      width: min(420px, 96vw);
+      aspect-ratio: 1;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+      gap: 2px;
+      background: #0d241c;
+      border: 4px solid #f0c84a;
+      border-radius: 12px;
+      padding: 4px;
+    }
+    .cell {
+      border-radius: 4px;
+      background: #1a4735;
+    }
+    .cell.snake { background: #48bb78; }
+    .cell.head { background: #68d391; box-shadow: inset 0 0 0 2px #fff; }
+    .cell.food { background: #f6ad55; display: grid; place-items: center; font-size: 0.85rem; }
+    .pad {
+      margin-top: 14px;
+      display: grid;
+      grid-template-areas:
+        ". up ."
+        "left . right"
+        ". down .";
+      gap: 8px;
+      width: 220px;
+    }
+    .pad button {
+      width: 64px;
+      height: 54px;
+      font-size: 1.4rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      background: #f0c84a;
+      color: #14352a;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .pad .up { grid-area: up; }
+    .pad .down { grid-area: down; }
+    .pad .left { grid-area: left; }
+    .pad .right { grid-area: right; }
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(10, 30, 22, 0.94);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 20; text-align: center; padding: 24px;
+    }
+    .overlay.hidden { display: none; }
+    .btn {
+      font-family: inherit;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 14px;
+      background: #f0c84a;
+      color: #14352a;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <span>🐍 الدودة والسكر</span>
+    <span id="score">النقاط: 0</span>
+  </div>
+  <div id="board"></div>
+  <div class="pad">
+    <button type="button" class="up" id="up">⬆️</button>
+    <button type="button" class="left" id="left">➡️</button>
+    <button type="button" class="right" id="right">⬅️</button>
+    <button type="button" class="down" id="down">⬇️</button>
+  </div>
+
+  <div class="overlay" id="startScreen">
+    <h1>🐍 الدودة والسكر</h1>
+    <p>كل سكرة = نقطة وتطوّل<br>لو خرجت من حافة تطلع من الناحية التانية<br>الاصطدام بجسمك = نهاية</p>
+    <button class="btn" type="button" id="startBtn">ابدأ 🚀</button>
+  </div>
+
+  <div class="overlay hidden" id="endScreen">
+    <h1>🍬 انتهت اللعبة</h1>
+    <p id="endMsg"></p>
+    <button class="btn" type="button" id="againBtn">من جديد 🔄</button>
+  </div>
+
+  <script>
+    const SIZE = 12;
+    const board = document.getElementById("board");
+    const scoreEl = document.getElementById("score");
+    const startScreen = document.getElementById("startScreen");
+    const endScreen = document.getElementById("endScreen");
+
+    let cells = [], snake = [], dir = { x: -1, y: 0 }, pending = null;
+    let food = null, score = 0, running = false, timer = null;
+
+    function idx(x, y) { return y * SIZE + x; }
+
+    function buildBoard() {
+      board.innerHTML = "";
+      cells = [];
+      for (let i = 0; i < SIZE * SIZE; i++) {
+        const d = document.createElement("div");
+        d.className = "cell";
+        board.appendChild(d);
+        cells.push(d);
+      }
+    }
+
+    function placeFood() {
+      let x, y, ok;
+      do {
+        x = Math.floor(Math.random() * SIZE);
+        y = Math.floor(Math.random() * SIZE);
+        ok = !snake.some(function (s) { return s.x === x && s.y === y; });
+      } while (!ok);
+      food = { x: x, y: y };
+    }
+
+    function draw() {
+      cells.forEach(function (c) { c.className = "cell"; c.textContent = ""; });
+      snake.forEach(function (s, i) {
+        const c = cells[idx(s.x, s.y)];
+        c.classList.add(i === 0 ? "head" : "snake");
+      });
+      if (food) {
+        const f = cells[idx(food.x, food.y)];
+        f.classList.add("food");
+        f.textContent = "🍬";
+      }
+    }
+
+    function setDir(nx, ny) {
+      if (!running) return;
+      if (dir.x + nx === 0 && dir.y + ny === 0) return;
+      pending = { x: nx, y: ny };
+    }
+
+    function tick() {
+      if (!running) return;
+      if (pending) { dir = pending; pending = null; }
+      const head = snake[0];
+      const nx = (head.x + dir.x + SIZE) % SIZE;
+      const ny = (head.y + dir.y + SIZE) % SIZE;
+
+      if (snake.some(function (s) { return s.x === nx && s.y === ny; })) return endGame();
+
+      snake.unshift({ x: nx, y: ny });
+      if (food && nx === food.x && ny === food.y) {
+        score++;
+        scoreEl.textContent = "النقاط: " + score;
+        placeFood();
+      } else {
+        snake.pop();
+      }
+      draw();
+    }
+
+    function startGame() {
+      snake = [{ x: 6, y: 6 }, { x: 7, y: 6 }, { x: 8, y: 6 }];
+      dir = { x: -1, y: 0 };
+      pending = null;
+      score = 0;
+      running = true;
+      scoreEl.textContent = "النقاط: 0";
+      startScreen.classList.add("hidden");
+      endScreen.classList.add("hidden");
+      buildBoard();
+      placeFood();
+      draw();
+      clearInterval(timer);
+      timer = setInterval(tick, 160);
+    }
+
+    function endGame() {
+      running = false;
+      clearInterval(timer);
+      document.getElementById("endMsg").textContent = "نقاطك: " + score;
+      endScreen.classList.remove("hidden");
+    }
+
+    document.getElementById("up").addEventListener("pointerdown", function (e) { e.preventDefault(); setDir(0, -1); });
+    document.getElementById("down").addEventListener("pointerdown", function (e) { e.preventDefault(); setDir(0, 1); });
+    document.getElementById("left").addEventListener("pointerdown", function (e) { e.preventDefault(); setDir(1, 0); });
+    document.getElementById("right").addEventListener("pointerdown", function (e) { e.preventDefault(); setDir(-1, 0); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowUp") setDir(0, -1);
+      if (e.key === "ArrowDown") setDir(0, 1);
+      if (e.key === "ArrowLeft") setDir(1, 0);
+      if (e.key === "ArrowRight") setDir(-1, 0);
+    });
+    document.getElementById("startBtn").addEventListener("click", startGame);
+    document.getElementById("againBtn").addEventListener("click", startGame);
+  </script>
+</body>
+</html>

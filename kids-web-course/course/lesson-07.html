@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>الحصة 7 — ألعاب تفاعل + موقع المركز</title>
+  <link rel="stylesheet" href="lesson-style.css" />
+</head>
+<body class="lesson" data-lesson="7">
+  <div class="top-bar">
+    <span class="course-name">🌐 كورس: أنا أصنع صفحتي</span>
+    <span class="session-time">⏱️ 90 – 120 دقيقة</span>
+  </div>
+
+  <div class="slide hero" style="background:linear-gradient(135deg,#c05621,#dd6b20,#ed8936);">
+    <p class="badge">الحصة 7 — تفاعل أكبر</p>
+    <h1>لعبة تتحرّك… وبعدين موقع الكنيسة</h1>
+    <p class="lead">نصف الحصة لعب · آخر الحصة نشوف موقع 3 صفحات قدامنا</p>
+  </div>
+
+  <div class="slide roadmap"><div class="roadmap-title">🗺️ المحطة 7</div><div id="roadmap" class="journey"></div></div>
+
+  <div class="slide">
+    <h2>📍 النهاردة هنوصل لـ…</h2>
+    <div class="destination">
+      <div class="dest-box start"><div class="icon">❓</div><div class="title">حصة 6</div><div class="desc">لعبة أسئلة بالضغط</div></div>
+      <div class="dest-arrow">←</div>
+      <div class="dest-box end"><div class="icon">🕹️</div><div class="title">حصة 7</div><div class="desc"><strong>لعبة حركة</strong><br>+ موقع المركز 3 صفحات</div></div>
+    </div>
+  </div>
+
+  <div class="slide agenda">
+    <h2>⏰ برنامج الحصة</h2>
+    <div class="agenda-item"><div class="agenda-time">10 د</div><div class="agenda-body"><h3>اختار نموذج لعبة</h3><p>كل طفل يختار واحدة من 4 ألعاب تحت</p></div></div>
+    <div class="agenda-item"><div class="agenda-time">50 د</div><div class="agenda-body"><h3>نبني اللعبة مع AI</h3><p>برومبت النموذج + لمسة الطفل (اسمه، ألوانه، شخصيته)</p></div></div>
+    <div class="agenda-item"><div class="agenda-time">15 د</div><div class="agenda-body"><h3>نجرب سوا</h3><p>زميل يلعب لعبة زميله دقيقة</p></div></div>
+    <div class="agenda-item"><div class="agenda-time">30 د</div><div class="agenda-body"><h3>عرض الخادم: موقع المركز</h3><p>4 مراحل برومبت على الشاشة — الأطفال يشوفوا الموقع يتبني قدامهم</p></div></div>
+  </div>
+
+  <div class="slide">
+    <h2>4 نماذج ألعاب — اختار واحدة</h2>
+    <div class="grid-4">
+      <div class="piece hot">🐍 الدودة والسكر<br><small>أسهم · كل سكرة تطوّل</small></div>
+      <div class="piece">⭐ صيّاد النجوم<br><small>اضغط النجوم قبل ما تقع</small></div>
+      <div class="piece">🧠 كروت الذاكرة<br><small>اقلب كارتين متشابهين</small></div>
+      <div class="piece">🚗 تجنّب العقبات<br><small>يمين/شمال تفادي الحواجز</small></div>
+    </div>
+    <p class="lead" style="margin-top:14px;">الأفضل لسن 9: <strong>صيّاد النجوم</strong> أو <strong>كروت الذاكرة</strong> — أسهل من الدودة على اللابتوب.</p>
+    <nav class="nav" style="justify-content:center;margin-top:14px;flex-wrap:wrap;gap:8px;">
+      <a href="../materials/examples/game-stars.html" target="_blank">⭐ نجوم</a>
+      <a href="../materials/examples/game-memory.html" target="_blank">🧠 ذاكرة</a>
+      <a href="../materials/examples/game-obstacles.html" target="_blank">🚗 عقبات</a>
+      <a href="../materials/examples/game-snake.html" target="_blank">🐍 دودة</a>
+      <a href="../materials/examples/facebook-profile.html" class="gold" target="_blank">f صفحة فيسبوك</a>
+    </nav>
+    <p class="lead" style="margin-top:12px;font-size:1rem;">برومبت كل لعبة لوحده:
+      <a href="../materials/prompts/day-07-game-stars.md" target="_blank">نجوم</a> ·
+      <a href="../materials/prompts/day-07-game-memory.md" target="_blank">ذاكرة</a> ·
+      <a href="../materials/prompts/day-07-game-obstacles.md" target="_blank">عقبات</a> ·
+      <a href="../materials/prompts/day-07-game-snake.md" target="_blank">دودة</a> ·
+      <a href="../materials/prompts/day-07-church-site.md" target="_blank">الموقع</a>
+    </p>
+  </div>
+
+  <div class="slide">
+    <h2>برومبت 1 — الدودة والسكر</h2>
+    <div class="code" style="direction:rtl;text-align:right;font-family:Tahoma,sans-serif;">اعمل لعبة HTML واحدة بالعربي: الدودة بتاكل سكر.
+لوحة مربعات، الأسهم تحرّك الدودة، كل سكرة = نقطة وتطوّل.
+الجدران أو جسمها = نهاية + النتيجة.
+أزرار لوحة للموبايل كمان. ملف واحد، ألوان فاقعة لطفل 9 سنين.</div>
+  </div>
+
+  <div class="slide">
+    <h2>برومبت 2 — صيّاد النجوم (موصى به)</h2>
+    <div class="code" style="direction:rtl;text-align:right;font-family:Tahoma,sans-serif;">اعمل لعبة HTML واحدة بالعربي: نجوم تقع من فوق.
+الطفل يضغط على النجمة قبل ما توصل الأرض.
+كل نجمة = نقطة. 3 نجوم وقعت = نهاية.
+زر ابدأ من جديد. خط كبير، مناسب للمس.</div>
+  </div>
+
+  <div class="slide">
+    <h2>برومبت 3 — كروت الذاكرة</h2>
+    <div class="code" style="direction:rtl;text-align:right;font-family:Tahoma,sans-serif;">اعمل لعبة ذاكرة HTML واحدة بالعربي: 8 كروت (4 أزواج إيموجي).
+اقلب كارتين. لو زي بعض يفضلوا مفتوحين. لو لأ يتقفلوا.
+عدّاد حركات في فوق. لما تخلص كل الأزواج تظهر «برافو».</div>
+  </div>
+
+  <div class="slide">
+    <h2>برومبت 4 — تجنّب العقبات</h2>
+    <div class="code" style="direction:rtl;text-align:right;font-family:Tahoma,sans-serif;">اعمل لعبة HTML واحدة بالعربي: شخصية صغيرة تحت الشاشة.
+الأسهم يمين/شمال. حواجز تنزل من فوق. لمس الحاجز = نهاية.
+كل حاجز تعدّيه = نقطة. زر إعادة.</div>
+  </div>
+
+  <div class="slide takeaway">
+    <h2>آخر الحصة — موقع المركز (الخادم قدامهم)</h2>
+    <p class="lead">موقع تعريفي بسيط: <strong>مركز الملاك ميخائيل</strong><br>كنيسة مارجرجس والأميرة تادرس — مطار النزهة</p>
+    <p><strong>3 صفحات:</strong> الرئيسية · الأنشطة · تواصل معنا</p>
+    <p>البرومبت على 4 مراحل — ملف لوحده: <a href="../materials/prompts/day-07-church-site.md" target="_blank">day-07-church-site.md</a><br>انسخ مرحلة، نفّذ، الأطفال يشوفوا، بعدين المرحلة اللي بعدها.</p>
+  </div>
+
+  <nav class="nav">
+    <a href="lesson-06.html">→ الحصة 6</a>
+    <a href="lesson-08.html" class="gold">المعرض 🎉</a>
+  </nav>
+  <script src="lesson-common.js"></script>
+</body>
+</html>
